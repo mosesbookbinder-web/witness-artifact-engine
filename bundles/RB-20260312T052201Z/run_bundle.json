@@ -1,0 +1,66 @@
+{
+  "artifacts": {
+    "artifact_sha256": "7f1c1a583f69b554b4c37d2cfdd4afdabfefe57692fc3d0277b8cde4c5685f81",
+    "primary_artifact": "The Witness Atom as a Cross-Domain Integer Primitive.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260312T052201Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-12T05:22:01Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "The Witness Atom as a Cross-Domain Integer Primitive.txt",
+      "sha256": "7f1c1a583f69b554b4c37d2cfdd4afdabfefe57692fc3d0277b8cde4c5685f81"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "9abb82f9cc32ef6c1e230ce0fcde8e84d38a6855d9603c6554b82c5fa1ccdd07"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "66b17c3b20ccd77cefe8e72f4b509b7550ef4c6af406d88a06fac5c45dd8a42a",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_4"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement"
+      ],
+      "missing_terms": [
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

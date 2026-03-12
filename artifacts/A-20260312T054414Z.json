@@ -1,0 +1,9 @@
+{
+  "artifact_id": "A-20260312T054414Z",
+  "timestamp_utc": "2026-03-12T05:44:14Z",
+  "filename": "demo_emit_entities_run_2.txt",
+  "format": "text",
+  "sha256": "52bc12c70ece5bf4e0d0e408e54c42a80c2ecb14fde2000d6730264f27799eb3",
+  "word_count": 50,
+  "text_preview": "{\n  \"entity\": {\n    \"entity_id\": \"dbbc8ab85b56e7ee\",\n    \"kind\": \"kernel_cell\",\n    \"title\": \"KC_DEMO_001\",\n    \"address\": {\n      \"space\": \"kernel.cell\",\n      \"key\": \"KC_DEMO_001\",\n      \"coords\": {\n        \"x\": 1.0\n      }\n    },\n    \"attributes\": {\n      \"authority\": \"SPEC\",\n      \"closure_event\": \"demo_close\"\n    },\n    \"witnesses\": [\n      {\n        \"artifact_path\": \"kernel/KC_DEMO_001.json\",\n        \"artifact_sha256\": \"623873a3bdd1f7476cbf16fe2f9458c4808bb1cac6812b8b1ee6e2473a85c9c5\",\n        \"grade\": \"DIRECT\",\n        \"observer\": \"bookbinder5\",\n        \"ts_utc\": \"2026-03-10T06:02:42Z\",\n        \"notes\": \"demo kernel cell\"\n      }\n    ],\n    \"is_active\": true\n  },\n  \"ts_utc\": \"2026-03-10T06:02:42Z\",\n  \"sha256\": \"c45c32dc6092b8829aeee6d06e261d24ada3def0d79af0804773321e07de424b\"\n}\nPASS"
+}

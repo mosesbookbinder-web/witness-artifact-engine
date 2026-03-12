@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "returncode": 2,
+  "stdout": "ORACLE_DECISION=INCOMPLETE\nFIRST_FAILED_GATE=G6_CONTINUATION_CONSTRAINT\nPACKET=/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/OBSTRUCTION.json\nREFUSAL_RECORD=/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/refusal_record.json\nMANIFEST=/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/SHA256_MANIFEST.json\n",
+  "stderr": "",
+  "outdir": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out",
+  "seal_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/SEAL.json",
+  "obstruction_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/OBSTRUCTION.json",
+  "refusal_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/refusal_record.json",
+  "manifest_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out/SHA256_MANIFEST.json"
+}

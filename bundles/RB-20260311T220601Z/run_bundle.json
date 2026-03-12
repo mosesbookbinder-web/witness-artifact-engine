@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "artifact_sha256": "e768aa9bd58ac2954e831b636ebdf74cbbea4447084ddc332fb896660d5a4f33",
+    "primary_artifact": "## A General Method for Determining Whether Systems May Continue.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260311T220601Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T22:06:01Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "## A General Method for Determining Whether Systems May Continue.txt",
+      "sha256": "e768aa9bd58ac2954e831b636ebdf74cbbea4447084ddc332fb896660d5a4f33"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "640ecab9aa39622f4a5fb4d7dc89ad93daecf007e228e37ef8e30b41632dc86e"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "68022f39da594f125840c5c57c054605c533a0b884a98d69ccc95ba7d288af49",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1"
+      ],
+      "missing_headings": [
+        "problem statement"
+      ],
+      "missing_terms": [
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

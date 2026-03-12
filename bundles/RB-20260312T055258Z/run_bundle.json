@@ -1,0 +1,70 @@
+{
+  "artifacts": {
+    "artifact_sha256": "fcc5476e1d7dbb44d02e20b742f598a1ede070db6dbbdf4d88c8d75797d8441a",
+    "primary_artifact": "crash log .txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": true,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260312T055258Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-12T05:52:58Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "crash log .txt",
+      "sha256": "fcc5476e1d7dbb44d02e20b742f598a1ede070db6dbbdf4d88c8d75797d8441a"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "3713934af1a19a4a55254def2ec603cdcf74cbdb022b829ee986ef6e9c46cf4e"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "f422ae3b7249ca13d0a68a9ec727f035270164e9d39cf193533f89961aa8a296",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_2",
+        "group_3"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "witness",
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

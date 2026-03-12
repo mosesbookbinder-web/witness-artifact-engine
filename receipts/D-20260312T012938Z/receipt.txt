@@ -1,0 +1,17 @@
+RECEIPT_ID: D-20260312T012938Z
+TIMESTAMP_UTC: 2026-03-12T01:29:38Z
+ARTIFACT_ID: A-20260312T012938Z
+FILENAME: top_mem.txt
+ARTIFACT_SHA256: f46d851168f4594d3a5342328527512925805f5a44751273945c3389e17776f1
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 18777
+REASONS:
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: witness, continuation, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_2, group_3
+RUN_BUNDLE_ID: RB-20260312T012938Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012938Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012938Z/oracle_out

@@ -1,0 +1,18 @@
+RECEIPT_ID: D-20260311T202324Z
+TIMESTAMP_UTC: 2026-03-11T20:23:24Z
+ARTIFACT_ID: A-20260311T202324Z
+FILENAME: FPCK_repair_cloudDocs_20260226T030235Z.txt
+ARTIFACT_SHA256: c31c1016236353b3d7444bb1f4ff4e8ccbc341f24f9336c519e404e2b5fd22d6
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 420
+REASONS:
+- Minimum word count not met (420 < 1200)
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: witness, continuation, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_2, group_3, group_4
+RUN_BUNDLE_ID: RB-20260311T202324Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202324Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202324Z/oracle_out

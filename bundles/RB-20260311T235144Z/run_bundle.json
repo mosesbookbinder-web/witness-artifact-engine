@@ -1,0 +1,70 @@
+{
+  "artifacts": {
+    "artifact_sha256": "58326514a03e91266896f31050d42336e5d401da93992996ac1715d76c6a988c",
+    "primary_artifact": "SHA256_MANIFEST.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260311T235144Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T23:51:44Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "SHA256_MANIFEST.txt",
+      "sha256": "58326514a03e91266896f31050d42336e5d401da93992996ac1715d76c6a988c"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "2975c42089a4da1fec0ebfd6c8617c568fab4c8f2abf0b9cc51375e97e05f036"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "6461444a4c3599c329af8956ffc8c1100c8a031ded35a2cfc9c2e4371b074b97",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_2",
+        "group_3",
+        "group_4"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

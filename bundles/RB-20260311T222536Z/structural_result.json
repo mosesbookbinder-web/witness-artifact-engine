@@ -1,0 +1,58 @@
+{
+  "decision": "INCOMPLETE",
+  "equivalence_map": {
+    "group_1": false,
+    "group_2": false,
+    "group_3": false,
+    "group_4": false
+  },
+  "forbidden_hits": [],
+  "heading_map": {
+    "abstract": false,
+    "conclusion": false,
+    "introduction": false,
+    "problem statement": false
+  },
+  "missing_groups": [
+    "group_1",
+    "group_2",
+    "group_3",
+    "group_4"
+  ],
+  "missing_headings": [
+    "abstract",
+    "introduction",
+    "problem statement",
+    "conclusion"
+  ],
+  "missing_terms": [
+    "witness",
+    "synthetic media"
+  ],
+  "reasons": [
+    "Minimum word count not met (32 < 1200)",
+    "Missing required headings: abstract, introduction, problem statement, conclusion",
+    "Missing required terms: witness, synthetic media",
+    "Equivalence overlay unsatisfied: group_1, group_2, group_3, group_4"
+  ],
+  "remediation": [
+    "Expand document to at least 1200 words",
+    "Add heading: \"abstract\"",
+    "Add heading: \"introduction\"",
+    "Add heading: \"problem statement\"",
+    "Add heading: \"conclusion\"",
+    "Add required term or equivalent explicit phrase: \"witness\"",
+    "Add required term or equivalent explicit phrase: \"synthetic media\"",
+    "Add language satisfying all declared equivalence groups"
+  ],
+  "witness": {
+    "artifact_present": true,
+    "equivalence_overlay_satisfied": false,
+    "forbidden_terms_absent": true,
+    "minimum_word_count": false,
+    "parse_success": true,
+    "required_headings_present": false,
+    "required_terms_present": false
+  },
+  "word_count": 32
+}

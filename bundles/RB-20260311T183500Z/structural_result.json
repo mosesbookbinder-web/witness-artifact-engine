@@ -1,0 +1,45 @@
+{
+  "decision": "INCOMPLETE",
+  "equivalence_map": {
+    "group_1": true,
+    "group_2": true,
+    "group_3": true,
+    "group_4": true
+  },
+  "forbidden_hits": [],
+  "heading_map": {
+    "abstract": false,
+    "conclusion": false,
+    "introduction": false,
+    "problem statement": true
+  },
+  "missing_groups": [],
+  "missing_headings": [
+    "abstract",
+    "introduction",
+    "conclusion"
+  ],
+  "missing_terms": [
+    "synthetic media"
+  ],
+  "reasons": [
+    "Missing required headings: abstract, introduction, conclusion",
+    "Missing required terms: synthetic media"
+  ],
+  "remediation": [
+    "Add heading: \"abstract\"",
+    "Add heading: \"introduction\"",
+    "Add heading: \"conclusion\"",
+    "Add required term or equivalent explicit phrase: \"synthetic media\""
+  ],
+  "witness": {
+    "artifact_present": true,
+    "equivalence_overlay_satisfied": true,
+    "forbidden_terms_absent": true,
+    "minimum_word_count": true,
+    "parse_success": true,
+    "required_headings_present": false,
+    "required_terms_present": false
+  },
+  "word_count": 4114
+}

@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "artifact_sha256": "c31c1016236353b3d7444bb1f4ff4e8ccbc341f24f9336c519e404e2b5fd22d6",
+    "primary_artifact": "FPCK_repair_cloudDocs_20260226T030235Z.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260311T202324Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T20:23:24Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "FPCK_repair_cloudDocs_20260226T030235Z.txt",
+      "sha256": "c31c1016236353b3d7444bb1f4ff4e8ccbc341f24f9336c519e404e2b5fd22d6"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "6d3c3b1a8d37a27785357f96110a44ca9af5fa5dcbebf50e1dcbe919703e8543"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "956305e54f59d402ba5bd5e30858fb8f8af7ff5b014cea5bec0c261355e0053a",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_2",
+        "group_3",
+        "group_4"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "witness",
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "artifacts": {
+    "artifact_sha256": "f46d851168f4594d3a5342328527512925805f5a44751273945c3389e17776f1",
+    "primary_artifact": "top_mem.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": true,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260312T013054Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-12T01:30:54Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "top_mem.txt",
+      "sha256": "f46d851168f4594d3a5342328527512925805f5a44751273945c3389e17776f1"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "c470477421c3a2a3e7eec115f58c09f1315df2d46055237681d464c00e7b80cf"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "646dabd5cfb81d766988ae67ccde413022ca538521ee175680052b4985f312da",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_2",
+        "group_3"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "witness",
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

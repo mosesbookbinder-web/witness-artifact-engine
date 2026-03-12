@@ -1,0 +1,9 @@
+{
+  "artifact_id": "A-20260312T055238Z",
+  "timestamp_utc": "2026-03-12T05:52:38Z",
+  "filename": "legal_correspondence_001.txt",
+  "format": "text",
+  "sha256": "5eb49d5a0c0420bf69fee0eb2b36a21eb62ec075af8b9f8e1bdb7407d926925e",
+  "word_count": 48,
+  "text_preview": "FROM: counsel@example.org\nTO: operator@example.org\nDATE: 2026-03-09T00:30:00Z\nSUBJECT: Notice of record continuity\n\nThis correspondence asserts that a prior record is complete and continuous.\nHowever, no attached prior receipt, hash, or linked witness record is included.\nThe system must determine whether continuation is admissible."
+}

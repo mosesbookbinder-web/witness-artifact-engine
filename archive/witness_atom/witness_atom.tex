@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{definition}{Definition}
+
+\begin{document}
+
+\section*{Witness Atom}
+
+\begin{definition}[Witness Atom]
+Let \(A\) be an artifact space, \(\Sigma\) a signal space, \(B\) a binding space, and \(W\) a witness space.
+
+Let
+\[
+s : A \to \Sigma,
+\qquad
+b : A \to B,
+\qquad
+\omega : A \to W
+\]
+be the signal, binding, and witness maps.
+
+The witness atom of an artifact \(a \in A\) is
+\[
+\alpha(a) := \bigl(s(a),\, b(a),\, \omega(a)\bigr).
+\]
+\end{definition}
+
+\[
+\boxed{
+\alpha(a) = (\sigma,\beta,\omega)
+}
+\qquad
+\text{where}
+\qquad
+\sigma=s(a),\ \beta=b(a),\ \omega=\omega(a).
+\]
+
+\[
+\boxed{
+t \text{ is admissible for } a
+\iff
+\alpha(\tau_t(a)) \equiv \alpha(a)
+}
+\]
+
+\end{document}

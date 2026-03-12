@@ -1,0 +1,102 @@
+{
+  "decision_id": "D-20260312T011654Z",
+  "timestamp_utc": "2026-03-12T01:16:54Z",
+  "artifact_id": "A-20260312T011654Z",
+  "artifact_sha256": "ec3e9b59f90f2810cec8a3b63ee01a8e3f93aa95bb771eaf32b7095caf42c6be",
+  "schema_sha256": "a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086",
+  "schema": {
+    "schema_name": "issmad_packet_v1",
+    "minimum_word_count": 1200,
+    "required_headings": [
+      "abstract",
+      "introduction",
+      "problem statement",
+      "conclusion"
+    ],
+    "required_terms": [
+      "witness",
+      "continuation",
+      "synthetic media"
+    ],
+    "forbidden_terms": [
+      "manifesto",
+      "self-authorizing",
+      "frozen under u.s. patent law"
+    ],
+    "equivalence_groups": [
+      [
+        "equivalence",
+        "equivalent",
+        "declared equivalence"
+      ],
+      [
+        "artifact",
+        "artifacts"
+      ],
+      [
+        "admissibility",
+        "admissible"
+      ],
+      [
+        "provenance",
+        "watermark",
+        "detection"
+      ]
+    ]
+  },
+  "decision": "INCOMPLETE",
+  "reasons": [
+    "Minimum word count not met (175 < 1200)",
+    "Missing required headings: abstract, introduction, problem statement, conclusion",
+    "Missing required terms: continuation, synthetic media",
+    "Equivalence overlay unsatisfied: group_1, group_2, group_4"
+  ],
+  "remediation": [
+    "Expand document to at least 1200 words",
+    "Add heading: \"abstract\"",
+    "Add heading: \"introduction\"",
+    "Add heading: \"problem statement\"",
+    "Add heading: \"conclusion\"",
+    "Add required term or equivalent explicit phrase: \"continuation\"",
+    "Add required term or equivalent explicit phrase: \"synthetic media\"",
+    "Add language satisfying all declared equivalence groups"
+  ],
+  "boole_witness": {
+    "artifact_present": true,
+    "parse_success": true,
+    "minimum_word_count": false,
+    "required_headings_present": false,
+    "required_terms_present": false,
+    "forbidden_terms_absent": true,
+    "equivalence_overlay_satisfied": false
+  },
+  "heading_map": {
+    "abstract": false,
+    "introduction": false,
+    "problem statement": false,
+    "conclusion": false
+  },
+  "missing_headings": [
+    "abstract",
+    "introduction",
+    "problem statement",
+    "conclusion"
+  ],
+  "equivalence_map": {
+    "group_1": false,
+    "group_2": false,
+    "group_3": true,
+    "group_4": false
+  },
+  "missing_terms": [
+    "continuation",
+    "synthetic media"
+  ],
+  "missing_groups": [
+    "group_1",
+    "group_2",
+    "group_4"
+  ],
+  "word_count": 175,
+  "forbidden_hits": []
+}

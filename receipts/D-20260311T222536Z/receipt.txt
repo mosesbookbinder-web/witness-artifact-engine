@@ -1,0 +1,18 @@
+RECEIPT_ID: D-20260311T222536Z
+TIMESTAMP_UTC: 2026-03-11T22:25:36Z
+ARTIFACT_ID: A-20260311T222536Z
+FILENAME: Continuation_Control_Framework.md
+ARTIFACT_SHA256: 0ec4f55d3406dd89c5d9b708348a87f22593cc59590dd94a4af8ac5e5eb94706
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 32
+REASONS:
+- Minimum word count not met (32 < 1200)
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: witness, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_2, group_3, group_4
+RUN_BUNDLE_ID: RB-20260311T222536Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T222536Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T222536Z/oracle_out

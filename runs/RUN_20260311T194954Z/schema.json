@@ -1,0 +1,40 @@
+{
+  "schema_name": "issmad_packet_v1",
+  "minimum_word_count": 1200,
+  "required_headings": [
+    "abstract",
+    "introduction",
+    "problem statement",
+    "conclusion"
+  ],
+  "required_terms": [
+    "witness",
+    "continuation",
+    "synthetic media"
+  ],
+  "forbidden_terms": [
+    "manifesto",
+    "self-authorizing",
+    "frozen under u.s. patent law"
+  ],
+  "equivalence_groups": [
+    [
+      "equivalence",
+      "equivalent",
+      "declared equivalence"
+    ],
+    [
+      "artifact",
+      "artifacts"
+    ],
+    [
+      "admissibility",
+      "admissible"
+    ],
+    [
+      "provenance",
+      "watermark",
+      "detection"
+    ]
+  ]
+}

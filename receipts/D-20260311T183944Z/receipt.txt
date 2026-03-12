@@ -1,0 +1,18 @@
+RECEIPT_ID: D-20260311T183944Z
+TIMESTAMP_UTC: 2026-03-11T18:39:44Z
+ARTIFACT_ID: A-20260311T183944Z
+FILENAME: mavericks_field.txt
+ARTIFACT_SHA256: 83f8a721eb250a1ade0d42157bfc36c51a758b8054173adf6fd11bce14b375c4
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 111
+REASONS:
+- Minimum word count not met (111 < 1200)
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: witness, continuation, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_2, group_3, group_4
+RUN_BUNDLE_ID: RB-20260311T183944Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T183944Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T183944Z/oracle_out

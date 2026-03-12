@@ -1,0 +1,60 @@
+{
+  "artifacts": {
+    "artifact_sha256": "65a1e6f3126cdd4f6be9b3fcaa2942ee41da94a6b1b9431127bd77591702a4ce",
+    "primary_artifact": "time_induced_coordinate_SHARPENED_FIXED.docx",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": true,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": true,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": true,
+      "parse_success": true,
+      "required_headings_present": true,
+      "required_terms_present": true
+    }
+  },
+  "meta": {
+    "operator_id": "bookbinder5",
+    "run_id": "RUN_20260311T200235Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T20:02:35Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "time_induced_coordinate_SHARPENED_FIXED.docx",
+      "sha256": "65a1e6f3126cdd4f6be9b3fcaa2942ee41da94a6b1b9431127bd77591702a4ce"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "67e4b1a84e164c0c3f2f857982661716d54a9b7aefc6b7d770f5bfcea6762737"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "6e135f21cc4fc5ce7a74e64656e6d303ebdb7a5b41bc7be741358da9303c3fbc"
+    },
+    {
+      "path": "extracted_text.txt",
+      "sha256": "b5283ccdab0a45f5c4ca80fd3d14582d61af01a533a62085a0fe8976e6aa4695"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "f6d4b349a4328f8da3743db488c95817345922fc8138eae60d44303b42cc48ed",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [],
+      "missing_headings": [],
+      "missing_terms": [],
+      "structural_decision": "PASS"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "decision_id": "D-20260311T155742Z",
+  "timestamp_utc": "2026-03-11T15:57:42Z",
+  "artifact_id": "A-20260311T155742Z",
+  "artifact_sha256": "65a1e6f3126cdd4f6be9b3fcaa2942ee41da94a6b1b9431127bd77591702a4ce",
+  "schema": {
+    "schema_name": "issmad_packet_v1",
+    "minimum_word_count": 1200,
+    "required_headings": [
+      "abstract",
+      "introduction",
+      "problem statement",
+      "conclusion"
+    ],
+    "required_terms": [
+      "witness",
+      "continuation",
+      "synthetic media"
+    ],
+    "forbidden_terms": [
+      "manifesto",
+      "self-authorizing",
+      "frozen under u.s. patent law"
+    ],
+    "equivalence_groups": [
+      [
+        "equivalence",
+        "equivalent",
+        "declared equivalence"
+      ],
+      [
+        "artifact",
+        "artifacts"
+      ],
+      [
+        "admissibility",
+        "admissible"
+      ],
+      [
+        "provenance",
+        "watermark",
+        "detection"
+      ]
+    ]
+  },
+  "decision": "PASS",
+  "reasons": [
+    "Artifact satisfies current declared witness schema"
+  ],
+  "remediation": [
+    "No remediation required"
+  ],
+  "boole_witness": {
+    "artifact_present": true,
+    "parse_success": true,
+    "minimum_word_count": true,
+    "required_headings_present": true,
+    "required_terms_present": true,
+    "forbidden_terms_absent": true,
+    "equivalence_overlay_satisfied": true
+  },
+  "heading_map": {
+    "abstract": true,
+    "introduction": true,
+    "problem statement": true,
+    "conclusion": true
+  },
+  "missing_headings": [],
+  "equivalence_map": {
+    "group_1": true,
+    "group_2": true,
+    "group_3": true,
+    "group_4": true
+  },
+  "missing_terms": [],
+  "missing_groups": [],
+  "word_count": 3206,
+  "forbidden_hits": []
+}

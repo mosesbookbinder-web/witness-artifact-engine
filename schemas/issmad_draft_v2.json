@@ -1,0 +1,25 @@
+{
+  "profile_name": "issmad_draft_v2",
+  "minimum_word_count": 0,
+  "required_headings": [],
+  "required_terms": [],
+  "forbidden_terms": [
+    "manifesto",
+    "self-authorizing",
+    "frozen under u.s. patent law"
+  ],
+  "equivalence_groups": [],
+  "soft_checks": {
+    "recommended_headings": [
+      "abstract",
+      "introduction",
+      "problem statement",
+      "conclusion"
+    ],
+    "recommended_terms": [
+      "witness",
+      "continuation",
+      "synthetic media"
+    ]
+  }
+}

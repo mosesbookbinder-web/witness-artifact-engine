@@ -1,0 +1,89 @@
+{
+  "decision": "INCOMPLETE",
+  "fingerprints": {
+    "bundle_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T011850Z/run_bundle.json",
+    "bundle_sha256_bytes": "4d934826936f5961dded6660ba02aaeee924f80f19133ec13897e3688de02bda",
+    "bundle_sha256_canon": "d13078a3b444e8eb080ca836cc392b80167ac2a118595b8718a956262d9916bc",
+    "gate_map": {
+      "A": "G0_ARTIFACT_EXISTENCE",
+      "E": "G6_CONTINUATION_CONSTRAINT",
+      "L": "G2_LINKAGE_INTEGRITY",
+      "M": "G5_REFINEMENT_MONOTONICITY",
+      "P": "G4_RESIDUE_PERSISTENCE",
+      "R": "G3_REPLAY_DETERMINISM",
+      "V": "G1_VEIL_HEADER_COMPLETE"
+    },
+    "gate_order": [
+      "A",
+      "V",
+      "L",
+      "R",
+      "P",
+      "M",
+      "E"
+    ]
+  },
+  "first_failed_gate": "G6_CONTINUATION_CONSTRAINT",
+  "gate_results": [
+    {
+      "details": {},
+      "gate_bit": "A",
+      "gate_id": "G0_ARTIFACT_EXISTENCE",
+      "reason": "bundle present with required top-level keys",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "V",
+      "gate_id": "G1_VEIL_HEADER_COMPLETE",
+      "reason": "meta header complete",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "checked": 3
+      },
+      "gate_bit": "L",
+      "gate_id": "G2_LINKAGE_INTEGRITY",
+      "reason": "registry matches file bytes",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "R",
+      "gate_id": "G3_REPLAY_DETERMINISM",
+      "reason": "replay witness present and verified",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "P",
+      "gate_id": "G4_RESIDUE_PERSISTENCE",
+      "reason": "residue ledger present",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "M",
+      "gate_id": "G5_REFINEMENT_MONOTONICITY",
+      "reason": "monotonicity witnessed",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "constraint_ok": false
+      },
+      "gate_bit": "E",
+      "gate_id": "G6_CONTINUATION_CONSTRAINT",
+      "reason": "constraint_ok not true",
+      "status": "INCOMPLETE"
+    }
+  ],
+  "packet_type": "OBSTRUCTION",
+  "required_next_witnesses": [
+    {
+      "gate": "G6_CONTINUATION_CONSTRAINT",
+      "need": "continuation.constraint_vector + constraint_ok:true"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "decision_id": "D-20260312T013054Z",
+  "timestamp_utc": "2026-03-12T01:30:54Z",
+  "artifact_id": "A-20260312T013054Z",
+  "artifact_sha256": "f46d851168f4594d3a5342328527512925805f5a44751273945c3389e17776f1",
+  "schema_sha256": "a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086",
+  "schema": {
+    "schema_name": "issmad_packet_v1",
+    "minimum_word_count": 1200,
+    "required_headings": [
+      "abstract",
+      "introduction",
+      "problem statement",
+      "conclusion"
+    ],
+    "required_terms": [
+      "witness",
+      "continuation",
+      "synthetic media"
+    ],
+    "forbidden_terms": [
+      "manifesto",
+      "self-authorizing",
+      "frozen under u.s. patent law"
+    ],
+    "equivalence_groups": [
+      [
+        "equivalence",
+        "equivalent",
+        "declared equivalence"
+      ],
+      [
+        "artifact",
+        "artifacts"
+      ],
+      [
+        "admissibility",
+        "admissible"
+      ],
+      [
+        "provenance",
+        "watermark",
+        "detection"
+      ]
+    ]
+  },
+  "decision": "INCOMPLETE",
+  "reasons": [
+    "Missing required headings: abstract, introduction, problem statement, conclusion",
+    "Missing required terms: witness, continuation, synthetic media",
+    "Equivalence overlay unsatisfied: group_1, group_2, group_3"
+  ],
+  "remediation": [
+    "Add heading: \"abstract\"",
+    "Add heading: \"introduction\"",
+    "Add heading: \"problem statement\"",
+    "Add heading: \"conclusion\"",
+    "Add required term or equivalent explicit phrase: \"witness\"",
+    "Add required term or equivalent explicit phrase: \"continuation\"",
+    "Add required term or equivalent explicit phrase: \"synthetic media\"",
+    "Add language satisfying all declared equivalence groups"
+  ],
+  "boole_witness": {
+    "artifact_present": true,
+    "parse_success": true,
+    "minimum_word_count": true,
+    "required_headings_present": false,
+    "required_terms_present": false,
+    "forbidden_terms_absent": true,
+    "equivalence_overlay_satisfied": false
+  },
+  "heading_map": {
+    "abstract": false,
+    "introduction": false,
+    "problem statement": false,
+    "conclusion": false
+  },
+  "missing_headings": [
+    "abstract",
+    "introduction",
+    "problem statement",
+    "conclusion"
+  ],
+  "equivalence_map": {
+    "group_1": false,
+    "group_2": false,
+    "group_3": false,
+    "group_4": true
+  },
+  "missing_terms": [
+    "witness",
+    "continuation",
+    "synthetic media"
+  ],
+  "missing_groups": [
+    "group_1",
+    "group_2",
+    "group_3"
+  ],
+  "word_count": 18777,
+  "forbidden_hits": []
+}

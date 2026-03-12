@@ -1,0 +1,66 @@
+{
+  "artifacts": {
+    "artifact_sha256": "5058a150befffc7e970716d696814104ee82134c093eff3070dd090d08e72242",
+    "primary_artifact": "UNITED STATES PATENT APPLICATION.docx",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": true,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260311T191610Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T19:16:10Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "UNITED STATES PATENT APPLICATION.docx",
+      "sha256": "5058a150befffc7e970716d696814104ee82134c093eff3070dd090d08e72242"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "5d73fef506b3be2a0e8e637ad183366fcd78e2e3fcf4f4b236eaed3947db529b"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "4c81eadb96d787c036d4b0130d5fb80d431b5b505f0662f36614d379a000370c",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_4"
+      ],
+      "missing_headings": [
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "witness",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

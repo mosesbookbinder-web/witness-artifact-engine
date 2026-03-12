@@ -1,0 +1,80 @@
+{
+  "decision": "PASS",
+  "fingerprints": {
+    "bundle_path": "/Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194954Z/run_bundle.json",
+    "bundle_sha256_bytes": "d365bf2b32bad334357ffa464a131ef47a4f6bbec5efc6c0b186e5c1b35ec818",
+    "bundle_sha256_canon": "0bc451e3be78be9dfeb296d519a09474d6ca2acfb5722dd110e25f77fcf780a7",
+    "gate_map": {
+      "A": "G0_ARTIFACT_EXISTENCE",
+      "E": "G6_CONTINUATION_CONSTRAINT",
+      "L": "G2_LINKAGE_INTEGRITY",
+      "M": "G5_REFINEMENT_MONOTONICITY",
+      "P": "G4_RESIDUE_PERSISTENCE",
+      "R": "G3_REPLAY_DETERMINISM",
+      "V": "G1_VEIL_HEADER_COMPLETE"
+    },
+    "gate_order": [
+      "A",
+      "V",
+      "L",
+      "R",
+      "P",
+      "M",
+      "E"
+    ]
+  },
+  "first_failed_gate": null,
+  "gate_results": [
+    {
+      "details": {},
+      "gate_bit": "A",
+      "gate_id": "G0_ARTIFACT_EXISTENCE",
+      "reason": "bundle present with required top-level keys",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "V",
+      "gate_id": "G1_VEIL_HEADER_COMPLETE",
+      "reason": "meta header complete",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "checked": 4
+      },
+      "gate_bit": "L",
+      "gate_id": "G2_LINKAGE_INTEGRITY",
+      "reason": "registry matches file bytes",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "R",
+      "gate_id": "G3_REPLAY_DETERMINISM",
+      "reason": "replay witness present and verified",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "P",
+      "gate_id": "G4_RESIDUE_PERSISTENCE",
+      "reason": "residue ledger present",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "M",
+      "gate_id": "G5_REFINEMENT_MONOTONICITY",
+      "reason": "monotonicity witnessed",
+      "status": "PASS"
+    },
+    {
+      "details": {},
+      "gate_bit": "E",
+      "gate_id": "G6_CONTINUATION_CONSTRAINT",
+      "reason": "continuation constraints satisfied",
+      "status": "PASS"
+    }
+  ]
+}

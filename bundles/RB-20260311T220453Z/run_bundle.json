@@ -1,0 +1,65 @@
+{
+  "artifacts": {
+    "artifact_sha256": "349fa684305e399604d2a5d4a492af84a80cc8e5d9197b127226f89914650735",
+    "primary_artifact": "COORDINATE_SHEET_20260224T055252Z.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260311T220453Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-11T22:04:53Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "COORDINATE_SHEET_20260224T055252Z.txt",
+      "sha256": "349fa684305e399604d2a5d4a492af84a80cc8e5d9197b127226f89914650735"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "efd693b14a158c6dac8e3b78a338c6ef026a604b9904db9ebf734b28a978ef9c"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "6d03d4255a540c33500b5dcf15cb7ae4b0cb4f072151a3daf88480c260edd895",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_4"
+      ],
+      "missing_headings": [
+        "introduction",
+        "problem statement"
+      ],
+      "missing_terms": [
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "artifact_id": "A-20260311T235144Z",
+  "timestamp_utc": "2026-03-11T23:51:44Z",
+  "filename": "SHA256_MANIFEST.txt",
+  "format": "text",
+  "sha256": "58326514a03e91266896f31050d42336e5d401da93992996ac1715d76c6a988c",
+  "word_count": 28,
+  "text_preview": "d845455201614c6a8ac16b6de300b26074d266d3fe7a22ab4050aea08a74b0a6  config.json\n37f40b5d9e0a0596004c790f9e20436d88793ceaae4573574e3fc448e09fece8  config.json.sha256\nc7d1d781826bc1c200bc6d46aca8a50b79742849c943936a93d95de0e24d64a5  decision.json\nd42c0b6626e74bae2b6c7a4c8ef7534d537fe228c7536120ac1a65c64ced01b5  decision.json.sha256\n9330e75c2df1b176955454e4e83e54e2ba6e3454a49fe502dcf3b02fcd8f8223  witness_report.json\n799c98c101c537e48609afd56583984740afe5a87b2c348b374e91f0bbc71fc5  witness_report.json.sha256\n98c5d9081ec8180f635d1b2882737df013186ee5f4c1d4f3224445379fbc6e97  work_item.json\n8ccbde7ae6a44a2491140b7355fffa2d11236a8be885fa9e7913cfe4cb3a7f5b  work_item.json.sha256"
+}

@@ -1,0 +1,12 @@
+RUN_ID: RUN_20260311T194522Z
+TIMESTAMP_UTC: 2026-03-11T19:45:23Z
+ARTIFACT: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/time_induced_coordinate_SHARPENED_FIXED.docx
+ARTIFACT_SHA256: 65a1e6f3126cdd4f6be9b3fcaa2942ee41da94a6b1b9431127bd77591702a4ce
+SCHEMA: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/schema.json
+SCHEMA_SHA256: 67e4b1a84e164c0c3f2f857982661716d54a9b7aefc6b7d770f5bfcea6762737
+RUN_BUNDLE: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/run_bundle.json
+RUN_BUNDLE_SHA256: 3a5fdbe99600a2588767f949d1806b3b2f3469a9f2ca9515f4852871c7457436
+ORACLE_PACKET: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/oracle_out/SEAL.json
+ORACLE_DECISION: PASS
+REFUSAL_RECORD: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/oracle_out/refusal_record.json
+MANIFEST: /Users/mosesbookbinder/witness_artifact_engine/runs/RUN_20260311T194522Z/oracle_out/SHA256_MANIFEST.json

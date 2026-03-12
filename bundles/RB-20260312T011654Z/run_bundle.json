@@ -1,0 +1,69 @@
+{
+  "artifacts": {
+    "artifact_sha256": "ec3e9b59f90f2810cec8a3b63ee01a8e3f93aa95bb771eaf32b7095caf42c6be",
+    "primary_artifact": "README.md",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260312T011654Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-12T01:16:54Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "README.md",
+      "sha256": "ec3e9b59f90f2810cec8a3b63ee01a8e3f93aa95bb771eaf32b7095caf42c6be"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "09b803f823ccc58670c9bc0296747ef80e0b1ff4eafe5fdee3b997003db2f683"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "bbcd4afe4250f44f95348201abaaecc60731a3e0222fc4139fd479153df3d52e",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_2",
+        "group_4"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

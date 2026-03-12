@@ -1,0 +1,17 @@
+RECEIPT_ID: D-20260311T191610Z
+TIMESTAMP_UTC: 2026-03-11T19:16:10Z
+ARTIFACT_ID: A-20260311T191610Z
+FILENAME: UNITED STATES PATENT APPLICATION.docx
+ARTIFACT_SHA256: 5058a150befffc7e970716d696814104ee82134c093eff3070dd090d08e72242
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 2509
+REASONS:
+- Missing required headings: introduction, problem statement, conclusion
+- Missing required terms: witness, synthetic media
+- Equivalence overlay unsatisfied: group_4
+RUN_BUNDLE_ID: RB-20260311T191610Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T191610Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T191610Z/oracle_out

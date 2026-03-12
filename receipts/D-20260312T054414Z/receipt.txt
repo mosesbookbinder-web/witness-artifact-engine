@@ -1,0 +1,18 @@
+RECEIPT_ID: D-20260312T054414Z
+TIMESTAMP_UTC: 2026-03-12T05:44:14Z
+ARTIFACT_ID: A-20260312T054414Z
+FILENAME: demo_emit_entities_run_2.txt
+ARTIFACT_SHA256: 52bc12c70ece5bf4e0d0e408e54c42a80c2ecb14fde2000d6730264f27799eb3
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 50
+REASONS:
+- Minimum word count not met (50 < 1200)
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: continuation, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_3, group_4
+RUN_BUNDLE_ID: RB-20260312T054414Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T054414Z/oracle_out

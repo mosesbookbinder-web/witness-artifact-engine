@@ -1,0 +1,10 @@
+[
+  {
+    "path": "SEAL.json",
+    "sha256": "dc96b492b09abd80a1a2149b38db6c8143205f0260badfc661c89b67f6181385"
+  },
+  {
+    "path": "refusal_record.json",
+    "sha256": "90343ab02d7a4d390801b0aea8b628ff319d03e78364d24ea214b4f888d53912"
+  }
+]

@@ -1,0 +1,17 @@
+RECEIPT_ID: D-20260311T193650Z
+TIMESTAMP_UTC: 2026-03-11T19:36:50Z
+ARTIFACT_ID: A-20260311T193650Z
+FILENAME: BRCTL_log_20260226T030210Z.txt
+ARTIFACT_SHA256: 65fe820fc805b3c1f1eeee10d3645d6dfa78f5fc407c97c53e6652d8901f5dd6
+SCHEMA_SHA256: a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086
+STRUCTURAL_DECISION: INCOMPLETE
+WORD_COUNT: 86332
+REASONS:
+- Missing required headings: abstract, introduction, problem statement, conclusion
+- Missing required terms: witness, synthetic media
+- Equivalence overlay unsatisfied: group_1, group_2, group_3, group_4
+RUN_BUNDLE_ID: RB-20260311T193650Z
+RUN_BUNDLE_PATH: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T193650Z/run_bundle.json
+ORACLE_OK: True
+ORACLE_RETURNCODE: 2
+ORACLE_OUTDIR: /Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T193650Z/oracle_out

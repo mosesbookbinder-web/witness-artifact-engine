@@ -1,0 +1,34 @@
+nettop [-n][-m <route | tcp | udp>][-t <interface-type>][-p <pid | process-name>][-c][-d][-x][-s <seconds>][-<l|L> samples][-P][-j <included-columns>][-k <excluded_columns>][-h]
+-m Set the mode
+  Without any parameters, nettop will monitor all tcp and udp sockets.
+    tcp - only tcp sockets will be monitored
+    udp - only udp sockets will be monitored
+    route - instead of sockets, the routing table will be monitored
+-n Disable address to name resolution
+-p Select a particular process for display.  The option may be repeated to select multiple processes
+-c Be gentle on the CPU - draw less often
+-d Delta mode
+-x Extended display of numbers instead of human readable suffixes such as MiB
+-P Display per-process summaries only, excluding connection details.
+-s <delay> Set the delay between updates to <delay> seconds.  The default value is 1 second.
+-t Set interface type
+  Without any parameters, nettop will monitor all interfaces. Multiple interface types can be defined, the effect is additive
+    wifi - only sockets bound to a wifi interface will be monitored
+    wired - only sockets bound to a wired interface will be monitored
+    awdl - only sockets bound to Apple Wireless Direct Link will be monitored
+    expensive - only sockets bound to interfaces marked as "expensive" will be monitored
+    loopback - only sockets bound to the loopback interface will be monitored
+    undefined - only sockets not bound to a particular interface will be monitored
+    external - a combination of all defined non-loopback interfaces
+-l <samples>   Use logging mode and display <samples> samples.  0 is treated as infinity.
+-L <samples>   Use logging mode, outputing in CSV format, and display <samples> samples.  0 is treated as infinity.
+-j <column name list>   Include columns named in the parameter list in the display.
+    column names are comma separated with no spaces, for example rtt_min,rtt_var,uuid 
+-J <column name list>   Include only the columns named in the parameter list in the display.
+    The ordering is currently as per nettop default, but may change in future revisions to match the order of the supplied column names.
+    For future compatibility it is recommended that any names supplied here are given an order that matches the output.
+-k <column name list>   Exclude columns named in the parameter list from the display.
+    column names are comma separated with no spaces, for example rcvsize,rtt_avg
+-h Display this help message
+
+While running, press the 'h' key to show the help menu.

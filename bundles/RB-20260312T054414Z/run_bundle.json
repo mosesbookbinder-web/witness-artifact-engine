@@ -1,0 +1,69 @@
+{
+  "artifacts": {
+    "artifact_sha256": "52bc12c70ece5bf4e0d0e408e54c42a80c2ecb14fde2000d6730264f27799eb3",
+    "primary_artifact": "demo_emit_entities_run_2.txt",
+    "schema_file": "schema.json",
+    "structural_result": "structural_result.json"
+  },
+  "continuation": {
+    "constraint_ok": false,
+    "constraint_vector": {
+      "artifact_present": true,
+      "equivalence_overlay_satisfied": false,
+      "forbidden_terms_absent": true,
+      "minimum_word_count": false,
+      "parse_success": true,
+      "required_headings_present": false,
+      "required_terms_present": false
+    }
+  },
+  "meta": {
+    "engine": "WITNESS_ARTIFACT_ENGINE_BRIDGED",
+    "operator_id": "bookbinder5",
+    "run_id": "RB-20260312T054414Z",
+    "seed": 0,
+    "timestamp_utc": "2026-03-12T05:44:14Z"
+  },
+  "refinement": {
+    "monotonicity_witness": true
+  },
+  "registry": [
+    {
+      "path": "demo_emit_entities_run_2.txt",
+      "sha256": "52bc12c70ece5bf4e0d0e408e54c42a80c2ecb14fde2000d6730264f27799eb3"
+    },
+    {
+      "path": "schema.json",
+      "sha256": "24125066e10933995d096abef35c86282ecab33e3af2e315a3cce4d6245c7119"
+    },
+    {
+      "path": "structural_result.json",
+      "sha256": "5eac6b4a043d67ad1b0092eee13ef23e13a641966f645d3fcbf7daa597153d1b"
+    }
+  ],
+  "replay": {
+    "replay_fingerprint": "6ca2d67319a133893729bae7bf37282af9ff9fd4f53f02bec874cadcbdbace2b",
+    "replay_policy": "deterministic-local",
+    "replay_verified": true
+  },
+  "residue": {
+    "residue_ledger": {
+      "missing_groups": [
+        "group_1",
+        "group_3",
+        "group_4"
+      ],
+      "missing_headings": [
+        "abstract",
+        "introduction",
+        "problem statement",
+        "conclusion"
+      ],
+      "missing_terms": [
+        "continuation",
+        "synthetic media"
+      ],
+      "structural_decision": "INCOMPLETE"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "path": "OBSTRUCTION.json",
+    "sha256": "92d3861c0e48664aac4329d9126ba928f098a71d1f2d7078062e33e609e18e73"
+  },
+  {
+    "path": "refusal_record.json",
+    "sha256": "9f869e993802708f66f91ca1c46e07e7c22756d74769ab85dff2e02c9dfe7eba"
+  }
+]

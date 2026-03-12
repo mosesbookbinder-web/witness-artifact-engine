@@ -1,0 +1,86 @@
+{
+  "decision_id": "D-20260311T184059Z",
+  "timestamp_utc": "2026-03-11T18:40:59Z",
+  "artifact_id": "A-20260311T184059Z",
+  "artifact_sha256": "14a2da40f502ef1877708fd3fad9e4632af923bba24d48bffb794c72627a94e7",
+  "schema_sha256": "a776002ccec91d5f4646d1f8e4e35a409280d594594d03f933628fb6e5a08086",
+  "schema": {
+    "schema_name": "issmad_packet_v1",
+    "minimum_word_count": 1200,
+    "required_headings": [
+      "abstract",
+      "introduction",
+      "problem statement",
+      "conclusion"
+    ],
+    "required_terms": [
+      "witness",
+      "continuation",
+      "synthetic media"
+    ],
+    "forbidden_terms": [
+      "manifesto",
+      "self-authorizing",
+      "frozen under u.s. patent law"
+    ],
+    "equivalence_groups": [
+      [
+        "equivalence",
+        "equivalent",
+        "declared equivalence"
+      ],
+      [
+        "artifact",
+        "artifacts"
+      ],
+      [
+        "admissibility",
+        "admissible"
+      ],
+      [
+        "provenance",
+        "watermark",
+        "detection"
+      ]
+    ]
+  },
+  "decision": "INCOMPLETE",
+  "reasons": [
+    "Missing required headings: problem statement",
+    "Missing required terms: synthetic media"
+  ],
+  "remediation": [
+    "Add heading: \"problem statement\"",
+    "Add required term or equivalent explicit phrase: \"synthetic media\""
+  ],
+  "boole_witness": {
+    "artifact_present": true,
+    "parse_success": true,
+    "minimum_word_count": true,
+    "required_headings_present": false,
+    "required_terms_present": false,
+    "forbidden_terms_absent": true,
+    "equivalence_overlay_satisfied": true
+  },
+  "heading_map": {
+    "abstract": true,
+    "introduction": true,
+    "problem statement": false,
+    "conclusion": true
+  },
+  "missing_headings": [
+    "problem statement"
+  ],
+  "equivalence_map": {
+    "group_1": true,
+    "group_2": true,
+    "group_3": true,
+    "group_4": true
+  },
+  "missing_terms": [
+    "synthetic media"
+  ],
+  "missing_groups": [],
+  "word_count": 22331,
+  "forbidden_hits": []
+}
