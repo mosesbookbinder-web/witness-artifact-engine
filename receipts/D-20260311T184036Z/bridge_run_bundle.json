@@ -1,8 +1,0 @@
-{
-  "run_id": "RB-20260311T184036Z",
-  "bundle_dir": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T184036Z",
-  "bundle_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T184036Z/run_bundle.json",
-  "artifact_copy": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T184036Z/WGA_ARCH_KERNEL_DECL_v1.0.docx",
-  "schema_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T184036Z/schema.json",
-  "structural_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T184036Z/structural_result.json"
-}

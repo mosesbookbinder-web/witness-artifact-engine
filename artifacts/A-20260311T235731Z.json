@@ -1,9 +1,0 @@
-{
-  "artifact_id": "A-20260311T235731Z",
-  "timestamp_utc": "2026-03-11T23:57:31Z",
-  "filename": "README.txt",
-  "format": "text",
-  "sha256": "0fc6bcab13efc04e01e687817123083646da4aef020780788673b64902320f07",
-  "word_count": 117,
-  "text_preview": "Add-on datasets for AppSheet (Metro-Atlas + Finance Experiments)\n\nFiles\n- ATL_ZONES.csv: Z1\u2013Z10 fixed spatial units\n- ATL_OVERLAYS.csv: Overlays A\u2013D (evidence types)\n- ATL_ITEMS_SAMPLE.csv: sample evidence items from the ledger + metro-atlas anchors\n- FIN_*_APPEND.csv: appendable rows compatible with the Structural Observability schema\n  * FIN_DOMAINS_APPEND.csv\n  * FIN_OPERATORS_APPEND.csv\n  * FIN_DOMAIN_OP_MAP_APPEND.csv\n  * FIN_STATES_APPEND.csv\n  * FIN_PRO_SIGNATURES_APPEND.csv\n  * FIN_TRANSPORT_LOG_APPEND.csv\n\nFinance mapping note\n- Each regime segment is modeled as a State node.\n- Bulk_Divergence = |mean(S_t) - mean(S_t in Calm)| (drift relative to baseline)\n- Topo_Divergence = std(S_t) (dispersion proxy)\n- Inv_Divergence and Commit_Divergence are 0 in these synthetic validations.\n\nYou can import ATL_* as separate supporting tables, or fold them into your DOMAINS/STATES Addressing_Context."
-}

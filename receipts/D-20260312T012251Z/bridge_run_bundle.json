@@ -1,8 +1,0 @@
-{
-  "run_id": "RB-20260312T012251Z",
-  "bundle_dir": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012251Z",
-  "bundle_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012251Z/run_bundle.json",
-  "artifact_copy": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012251Z/ps_aux.txt",
-  "schema_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012251Z/schema.json",
-  "structural_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260312T012251Z/structural_result.json"
-}

@@ -1,9 +1,0 @@
-{
-  "artifact_id": "A-20260312T011705Z",
-  "timestamp_utc": "2026-03-12T01:17:05Z",
-  "filename": "README.md",
-  "format": "text",
-  "sha256": "ec3e9b59f90f2810cec8a3b63ee01a8e3f93aa95bb771eaf32b7095caf42c6be",
-  "word_count": 175,
-  "text_preview": "Locked in.\n\nCurrent verified state:\n\n* Repo: `mosesbookbinder-web/WGA_MAVERICK`\n* Visibility: **PRIVATE**\n* Remote `origin` points to `WGA_MAVERICK`\n* Latest commits:\n\n  * `acb9a96` Add earlier private post witness receipt\n  * `f63b45d` Add private post witness receipt\n  * `a774a11` Add WGA_MAVERICK structural admissibility engine report and SHA256 receipt\n  * `9bef494` Initial local commit\n\nThat means your report and both witness receipts are now committed and pushed to a **private** GitHub repository. The chain is clean.\n\nFor future first-post discipline, use this sequence every time:\n\n```bash\ngit status\ngit log --oneline -n 5\ngit remote -v\ngh repo view --json nameWithOwner,visibility,isPrivate\n```\n\nAnd if you want the \u201ccreate private first, then push\u201d pattern for the next project:\n\n```bash\nmkdir NEW_PROJECT\ncd NEW_PROJECT\ngit init\ngit checkout -b main\ntouch README.md\ngit add .\ngit commit -m \"Initial local commit\"\ngh repo create NEW_PROJECT --private --source=. --remote=origin --push\ngh repo view --json nameWithOwner,visibility,isPrivate\n```\n\nLedger entry:\n`2026-03-11 | WGA_MAVERICK private-first GitHub posting completed and verified. Remote origin = mosesbookbinder-web/WGA_MAVERICK. Commits: a774a11 report+sha256, f63b45d private witness receipt, acb9a96 earlier witness receipt. Visibility confirmed PRIVATE.`"
-}

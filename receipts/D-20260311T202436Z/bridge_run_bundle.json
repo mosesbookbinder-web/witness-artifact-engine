@@ -1,8 +1,0 @@
-{
-  "run_id": "RB-20260311T202436Z",
-  "bundle_dir": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202436Z",
-  "bundle_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202436Z/run_bundle.json",
-  "artifact_copy": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202436Z/FPCK_repair_cloudDocs_20260226T030235Z.txt",
-  "schema_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202436Z/schema.json",
-  "structural_path": "/Users/mosesbookbinder/witness_artifact_engine/bundles/RB-20260311T202436Z/structural_result.json"
-}

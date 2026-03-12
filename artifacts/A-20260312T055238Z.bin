@@ -1,8 +1,0 @@
-FROM: counsel@example.org
-TO: operator@example.org
-DATE: 2026-03-09T00:30:00Z
-SUBJECT: Notice of record continuity
-
-This correspondence asserts that a prior record is complete and continuous.
-However, no attached prior receipt, hash, or linked witness record is included.
-The system must determine whether continuation is admissible.
