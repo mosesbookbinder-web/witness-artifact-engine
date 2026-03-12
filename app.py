@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import json
 import hashlib
+import json
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import streamlit as st
 
-# --- repo bridge -------------------------------------------------------------
 BASE = Path.cwd()
 HOME = Path.home()
 KERNEL_REPO = HOME / "witness-kernel"
@@ -19,13 +19,17 @@ if str(KERNEL_REPO) not in sys.path:
 from wga_kernel.publication_gate import evaluate_artifact
 from wga_kernel.decision_receipt import emit_decision_receipt
 
-# --- paths ------------------------------------------------------------------
 SCHEMAS = BASE / "schemas"
 RECEIPTS = BASE / "receipts"
+ARCHIVE = BASE / "archive"
+ARCHIVE_INDEX = ARCHIVE / "archive_index.json"
+
 SCHEMAS.mkdir(parents=True, exist_ok=True)
 RECEIPTS.mkdir(parents=True, exist_ok=True)
+ARCHIVE.mkdir(parents=True, exist_ok=True)
+if not ARCHIVE_INDEX.exists():
+    ARCHIVE_INDEX.write_text("[]\n", encoding="utf-8")
 
-# seed a default profile if missing
 issmad_profile = SCHEMAS / "issmad_draft_v2.json"
 if not issmad_profile.exists():
     issmad_profile.write_text(
@@ -60,20 +64,94 @@ if not issmad_profile.exists():
         encoding="utf-8",
     )
 
-# --- helpers ----------------------------------------------------------------
+
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
 
 def utc_stamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
-def load_json(path: Path) -> dict:
+
+def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write_json(path: Path, obj) -> None:
+    path.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+
 
 def receipt_dirs(folder: Path) -> list[Path]:
     return sorted([p for p in folder.iterdir() if p.is_dir()], reverse=True) if folder.exists() else []
 
-# --- ui ---------------------------------------------------------------------
+
+def archive_dirs(folder: Path) -> list[Path]:
+    return sorted([p for p in folder.iterdir() if p.is_dir() and p.name.startswith("A-")], reverse=True) if folder.exists() else []
+
+
+def next_artifact_id() -> str:
+    index = load_json(ARCHIVE_INDEX)
+    seq = len(index) + 1
+    return f"A-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{seq:04d}"
+
+
+def promote_run_to_archive(run_dir: Path) -> dict:
+    result_path = run_dir / "result.json"
+    manifest_path = run_dir / "manifest.json"
+    receipt_path = run_dir / "decision_receipt.json"
+
+    if not result_path.exists() or not manifest_path.exists() or not receipt_path.exists():
+        raise RuntimeError("Run directory missing required result, manifest, or decision receipt")
+
+    result = load_json(result_path)
+    manifest = load_json(manifest_path)
+    receipt = load_json(receipt_path)
+
+    bundle = result.get("witness_bundle", {})
+    artifact_path = Path(bundle["artifact_path"])
+    artifact_sha256 = bundle["artifact_sha256"]
+    decision_receipt_sha256 = bundle["decision_receipt_sha256"]
+
+    artifact_id = next_artifact_id()
+    dest = ARCHIVE / artifact_id
+    dest.mkdir(parents=True, exist_ok=False)
+
+    copied = []
+    for p in [
+        artifact_path,
+        run_dir / "decision_receipt.json",
+        run_dir / "decision_receipt.json.sha256",
+        run_dir / "result.json",
+        run_dir / "manifest.json",
+    ]:
+        if p.exists():
+            shutil.copy2(p, dest / p.name)
+            copied.append(p.name)
+
+    archive_record = {
+        "artifact_id": artifact_id,
+        "timestamp_utc": receipt.get("timestamp_utc"),
+        "artifact_name": artifact_path.name,
+        "artifact_sha256": artifact_sha256,
+        "decision_receipt_sha256": decision_receipt_sha256,
+        "kernel_decision": result.get("kernel_decision"),
+        "submission_readiness": result.get("submission_readiness"),
+        "source_run": run_dir.name,
+        "author": receipt.get("meta", {}).get("author"),
+        "provenance": receipt.get("meta", {}).get("provenance"),
+        "archive_path": str(dest),
+        "copied_files": copied,
+    }
+
+    write_json(dest / "archive_record.json", archive_record)
+
+    index = load_json(ARCHIVE_INDEX)
+    index.append(archive_record)
+    write_json(ARCHIVE_INDEX, index)
+
+    return archive_record
+
+
 st.set_page_config(page_title="Witness Console", layout="wide")
 st.title("Witness Console")
 
@@ -90,9 +168,9 @@ with st.sidebar:
     st.caption(f"Kernel repo: {KERNEL_REPO}")
     st.caption(f"App repo: {BASE}")
 
-main_tab, runs_tab, profiles_tab = st.tabs(["New Run", "Recent Runs", "Profiles"])
+tab_run, tab_receipts, tab_archive, tab_profiles = st.tabs(["New Run", "Recent Runs", "Archive", "Profiles"])
 
-with main_tab:
+with tab_run:
     c1, c2 = st.columns([1.2, 1])
 
     with c1:
@@ -106,7 +184,6 @@ with main_tab:
 
     with c2:
         st.subheader("Mode")
-        st.write("Kernel decision is separate from venue readiness.")
         st.code(
             "Kernel: HALT / INDETERMINATE / PASS\n"
             "Submission: READY / EDITORIAL_GAPS / NOT_REQUESTED",
@@ -166,18 +243,15 @@ with main_tab:
                 **receipt_info,
             }
 
-            (run_dir / "result.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
-            (run_dir / "manifest.json").write_text(
-                json.dumps(
-                    {
-                        "run_id": run_id,
-                        "artifact_name": artifact_name,
-                        "artifact_sha256": artifact_sha,
-                        "decision_receipt_sha256": receipt_info["decision_receipt_sha256"],
-                    },
-                    indent=2,
-                ),
-                encoding="utf-8",
+            write_json(run_dir / "result.json", result)
+            write_json(
+                run_dir / "manifest.json",
+                {
+                    "run_id": run_id,
+                    "artifact_name": artifact_name,
+                    "artifact_sha256": artifact_sha,
+                    "decision_receipt_sha256": receipt_info["decision_receipt_sha256"],
+                },
             )
 
             m1, m2, m3 = st.columns(3)
@@ -186,13 +260,11 @@ with main_tab:
             m3.metric("Word Count", result.get("word_count", len(text.split())))
 
             lcol, rcol = st.columns(2)
-
             with lcol:
                 st.subheader("Kernel Findings")
                 st.json(result.get("kernel_findings", []))
                 st.subheader("Witness Bundle")
                 st.json(result.get("witness_bundle", {}))
-
             with rcol:
                 st.subheader("Editorial Delta")
                 st.json(result.get("publication_findings", []))
@@ -202,7 +274,7 @@ with main_tab:
             st.subheader("Full Result")
             st.json(result)
 
-with runs_tab:
+with tab_receipts:
     dirs = receipt_dirs(RECEIPTS)
     if not dirs:
         st.info("No runs yet.")
@@ -210,8 +282,19 @@ with runs_tab:
         selected_run = st.selectbox("Select run", [p.name for p in dirs])
         run_dir = RECEIPTS / selected_run
 
-        left, right = st.columns(2)
+        promote_col, info_col = st.columns([1, 2])
+        with promote_col:
+            if st.button("Promote to Archive", use_container_width=True):
+                try:
+                    record = promote_run_to_archive(run_dir)
+                    st.success(f"Archived as {record['artifact_id']}")
+                    st.json(record)
+                except Exception as e:
+                    st.error(str(e))
+        with info_col:
+            st.caption("Promotion copies the governed artifact and its witness materials into append-only archive storage.")
 
+        left, right = st.columns(2)
         with left:
             for name in ["decision_receipt.json", "decision_receipt.json.sha256", "result.json", "manifest.json"]:
                 p = run_dir / name
@@ -225,7 +308,26 @@ with runs_tab:
             st.markdown("**Run Files**")
             st.json(files)
 
-with profiles_tab:
+with tab_archive:
+    st.subheader("Archive")
+    index = load_json(ARCHIVE_INDEX)
+    st.metric("Archived Artifacts", len(index))
+
+    dirs = archive_dirs(ARCHIVE)
+    if not dirs:
+        st.info("No archived artifacts yet.")
+    else:
+        selected_artifact = st.selectbox("Artifact", [p.name for p in dirs])
+        artifact_dir = ARCHIVE / selected_artifact
+
+        rec = artifact_dir / "archive_record.json"
+        if rec.exists():
+            st.json(load_json(rec))
+
+        st.markdown("**Archived Files**")
+        st.json(sorted([p.name for p in artifact_dir.iterdir() if p.is_file()]))
+
+with tab_profiles:
     files = sorted(SCHEMAS.glob("*.json"))
     if not files:
         st.warning("No profiles found.")
