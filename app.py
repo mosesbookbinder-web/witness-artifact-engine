@@ -1,4 +1,151 @@
 from __future__ import annotations
+import json
+from datetime import datetime
+from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
+import streamlit as st
+
+
+def build_report_text(run_id: str, result: dict, archive_record: dict | None = None) -> str:
+    lines = []
+    lines.append("# Witness Console Report")
+    lines.append("")
+    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
+    lines.append(f"Run ID: {run_id}")
+    lines.append("")
+
+    lines.append("## Summary")
+    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
+    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
+    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
+    lines.append("")
+
+    lines.append("## Kernel Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Witness Bundle")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Publication Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Soft Recommendations")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    if archive_record:
+        lines.append("## Archive Record")
+        lines.append("```json")
+        lines.append(json.dumps(archive_record, indent=2))
+        lines.append("```")
+        lines.append("")
+
+    lines.append("## Full Result")
+    lines.append("```json")
+    lines.append(json.dumps(result, indent=2))
+    lines.append("```")
+    lines.append("")
+
+    return "\n".join(lines)
+def render_decision_banner(result: dict) -> None:
+    kernel = result.get("kernel_decision", "UNKNOWN")
+    submission = result.get("submission_readiness", "UNKNOWN")
+    wb = result.get("witness_bundle", {}) or {}
+
+    st.subheader("Run Result")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.metric("System Decision", kernel)
+    with c2:
+        st.metric("Submission Status", submission)
+
+    st.code(
+        "\n".join([
+            f"artifact_sha256: {wb.get('artifact_sha256', 'N/A')}",
+            f"decision_receipt_sha256: {wb.get('decision_receipt_sha256', 'N/A')}",
+        ]),
+        language="text",
+    )
+
+
+def render_witness_bundle(result: dict) -> None:
+    wb = result.get("witness_bundle", {}) or {}
+    st.subheader("Witness Bundle")
+
+    artifact_path = wb.get("artifact_path", "N/A")
+    artifact_sha = wb.get("artifact_sha256", "N/A")
+    receipt_path = wb.get("decision_receipt_path", "N/A")
+    receipt_sha = wb.get("decision_receipt_sha256", "N/A")
+
+    block = "\n".join([
+        "Artifact",
+        f"  path: {artifact_path}",
+        f"  sha256: {artifact_sha}",
+        "",
+        "Decision Receipt",
+        f"  path: {receipt_path}",
+        f"  sha256: {receipt_sha}",
+    ])
+    st.code(block, language="text")
+
+
+def render_findings(result: dict) -> None:
+    kernel_findings = result.get("kernel_findings", []) or []
+    soft_findings = result.get("publication_soft_findings", []) or []
+
+    st.subheader("Kernel Findings")
+    if kernel_findings:
+        for item in kernel_findings:
+            st.write(f"• {item}")
+    else:
+        st.write("None")
+
+    st.subheader("Editorial Recommendations")
+    if soft_findings:
+        for item in soft_findings:
+            st.write(f"• {item}")
+    else:
+        st.write("None")
+
+
+def render_replay_command(result: dict) -> None:
+    wb = result.get("witness_bundle", {}) or {}
+    artifact_path = wb.get("artifact_path")
+    receipt_path = wb.get("decision_receipt_path")
+
+    if artifact_path and receipt_path:
+        st.subheader("Replay Command")
+        cmd = "\n".join([
+            "python verify_receipt.py \\",
+            f'  --artifact "{artifact_path}" \\',
+            f'  --receipt "{receipt_path}"',
+        ])
+        st.code(cmd, language="bash")
+
+def build_report_zip(run_id: str, result: dict, archive_record: dict | None = None) -> bytes:
+    report_text = build_report_text(run_id, result, archive_record)
+    mem = BytesIO()
+
+    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
+        zf.writestr(f"{run_id}_report.md", report_text)
+        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
+        if archive_record:        
+             zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
+
+    mem.seek(0)
+    return mem.read()
+
 
 import hashlib
 import json
@@ -334,3 +481,146 @@ with tab_profiles:
     else:
         chosen = st.selectbox("Profile file", [p.name for p in files])
         st.json(load_json(SCHEMAS / chosen))
+
+import json
+from datetime import datetime
+from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
+
+def build_report_text(run_id, result, archive_record=None):
+    lines = []
+    lines.append("# Witness Console Report")
+    lines.append("")
+    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
+    lines.append(f"Run ID: {run_id}")
+    lines.append("")
+
+    lines.append("## Summary")
+    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
+    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
+    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
+    lines.append("")
+
+    lines.append("## Kernel Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Witness Bundle")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Publication Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Soft Recommendations")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    if archive_record:
+        lines.append("## Archive Record")
+        lines.append("```json")
+        lines.append(json.dumps(archive_record, indent=2))
+        lines.append("```")
+        lines.append("")
+
+    lines.append("## Full Result")
+    lines.append("```json")
+    lines.append(json.dumps(result, indent=2))
+    lines.append("```")
+    lines.append("")
+
+    return "\n".join(lines)
+
+def build_report_zip(run_id, result, archive_record=None):
+    report_text = build_report_text(run_id, result, archive_record)
+    mem = BytesIO()
+
+    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
+        zf.writestr(f"{run_id}_report.md", report_text)
+        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
+        if archive_record:
+            zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
+
+    mem.seek(0)
+    return mem.read()
+
+import json
+from datetime import datetime
+from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
+
+def build_report_text(run_id, result, archive_record=None):
+    lines = []
+    lines.append("# Witness Console Report")
+    lines.append("")
+    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
+    lines.append(f"Run ID: {run_id}")
+    lines.append("")
+
+    lines.append("## Summary")
+    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
+    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
+    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
+    lines.append("")
+
+    lines.append("## Kernel Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Witness Bundle")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Publication Findings")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    lines.append("## Soft Recommendations")
+    lines.append("```json")
+    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
+    lines.append("```")
+    lines.append("")
+
+    if archive_record:
+        lines.append("## Archive Record")
+        lines.append("```json")
+        lines.append(json.dumps(archive_record, indent=2))
+        lines.append("```")
+        lines.append("")
+
+    lines.append("## Full Result")
+    lines.append("```json")
+    lines.append(json.dumps(result, indent=2))
+    lines.append("```")
+    lines.append("")
+
+    return "\n".join(lines)
+
+def build_report_zip(run_id, result, archive_record=None):
+    report_text = build_report_text(run_id, result, archive_record)
+    mem = BytesIO()
+
+    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
+        zf.writestr(f"{run_id}_report.md", report_text)
+        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
+        if archive_record:
+            zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
+
+    mem.seek(0)
+    return mem.read()
+
