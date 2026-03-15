@@ -1,0 +1,29 @@
+{
+  "decision": "PASS",
+  "kernel_decision": "PASS",
+  "kernel_findings": [],
+  "submission_readiness": "READY",
+  "publication_findings": [],
+  "publication_soft_findings": [],
+  "witness_bundle": {
+    "artifact_path": "/Users/mosesbookbinder/witness_artifact_engine/receipts/RUN_20260314T235723Z/pasted_20260314T235723Z.txt",
+    "artifact_sha256": "d76eae91301d58f5be3ea8c3afec11993242abec443bdfc4b076e01c0d29c9a0",
+    "decision_receipt_path": "/Users/mosesbookbinder/witness_artifact_engine/receipts/RUN_20260314T235723Z/decision_receipt.json",
+    "decision_receipt_sha256_path": "/Users/mosesbookbinder/witness_artifact_engine/receipts/RUN_20260314T235723Z/decision_receipt.json.sha256",
+    "decision_receipt_sha256": "3122313dc98cb380e81ba193182cd237cf04038bda00998c68bd9569659571e6"
+  },
+  "word_count": 1155,
+  "artifact_bytes": 11200,
+  "artifact_lines": 313,
+  "kernel_gate_vector": {
+    "A": 1,
+    "V": 1,
+    "L": 1,
+    "R": 1,
+    "P": 1,
+    "M": 1,
+    "E": 1
+  },
+  "timestamp_utc": "2026-03-14T23:57:23.004204+00:00",
+  "run_id": "RUN_20260314T235723Z"
+}
