@@ -1,17 +1,33 @@
-.DS_Store
+# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.log
-.streamlit/secrets.toml
-.vscode/
-.idea/
-receipts/
-runs/
+
+# Virtual environment
+.venv/
+
+# Local backups
+app.py.bak*
+*.bak
+
+# Local runtime / generated receipts
+SHA256_MANIFEST.txt
+SHA256_MANIFEST.txt.sha256
+old_records.csv
+
+# Archive churn
+archive/A-*/
+archive/A-LEGACY-*/
+archive/archive_*.json
+archive/archive_index.backup.json
+
+# Runtime output directories
+artifacts/
 bundles/
 decisions/
-artifacts/
+receipts/
+runs/
+
+# LaTeX build artifacts
 *.aux
 *.out
 *.toc
@@ -21,3 +37,13 @@ artifacts/
 *.fdb_latexmk
 *.synctex.gz
 texput.log
+*.log
+
+# macOS / editor / local secrets
+.DS_Store
+.streamlit/secrets.toml
+.vscode/
+.idea/
+
+# Local runtime archive stamps
+ARCHIVE_STAMP/

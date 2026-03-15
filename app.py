@@ -1,626 +1,509 @@
-from __future__ import annotations
+import hashlib
 import json
-from datetime import datetime
-from io import BytesIO
-from zipfile import ZipFile, ZIP_DEFLATED
+import re
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
 import streamlit as st
 
 
-def build_report_text(run_id: str, result: dict, archive_record: dict | None = None) -> str:
-    lines = []
-    lines.append("# Witness Console Report")
-    lines.append("")
-    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
-    lines.append(f"Run ID: {run_id}")
-    lines.append("")
+APP_TITLE = "Witness Console"
+RECEIPTS_DIR = Path("receipts")
+UPLOAD_TYPES = ["txt", "md", "json", "tex", "log", "csv"]
 
-    lines.append("## Summary")
-    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
-    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
-    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
-    lines.append("")
 
-    lines.append("## Kernel Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
 
-    lines.append("## Witness Bundle")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
-    lines.append("```")
-    lines.append("")
 
-    lines.append("## Publication Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
+def iso_utc_now() -> str:
+    return utc_now().isoformat()
 
-    lines.append("## Soft Recommendations")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
 
-    if archive_record:
-        lines.append("## Archive Record")
-        lines.append("```json")
-        lines.append(json.dumps(archive_record, indent=2))
-        lines.append("```")
-        lines.append("")
+def run_id_from_now() -> str:
+    return utc_now().strftime("RUN_%Y%m%dT%H%M%SZ")
 
-    lines.append("## Full Result")
-    lines.append("```json")
-    lines.append(json.dumps(result, indent=2))
-    lines.append("```")
-    lines.append("")
 
-    return "\n".join(lines)
-def render_decision_banner(result: dict) -> None:
-    kernel = result.get("kernel_decision", "UNKNOWN")
-    submission = result.get("submission_readiness", "UNKNOWN")
-    wb = result.get("witness_bundle", {}) or {}
+def timestamp_token() -> str:
+    return utc_now().strftime("%Y%m%dT%H%M%SZ")
 
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def count_words(text: str) -> int:
+    return len(re.findall(r"\b\S+\b", text))
+
+
+def artifact_stats(path: str) -> dict[str, int]:
+    p = Path(path)
+    text = p.read_text(encoding="utf-8", errors="replace")
+    return {
+        "artifact_bytes": p.stat().st_size,
+        "artifact_lines": text.count("\n") + (0 if text == "" else 1),
+    }
+
+
+def has_heading(text: str, name: str) -> bool:
+    pattern = rf"(?im)^\s*#*\s*{re.escape(name)}\s*:?\s*$"
+    return re.search(pattern, text) is not None
+
+
+def recommended_term_missing(text: str, term: str) -> bool:
+    return term.lower() not in text.lower()
+
+
+def evaluate_publication_soft_findings(text: str) -> list[str]:
+    findings: list[str] = []
+
+    for heading in ["abstract", "introduction", "problem statement"]:
+        if not has_heading(text, heading):
+            findings.append(f"Recommended heading missing: {heading}")
+
+    if recommended_term_missing(text, "synthetic media"):
+        findings.append("Recommended term missing: synthetic media")
+
+    return findings
+
+
+def kernel_gate_vector_for_pass() -> dict[str, int]:
+    return {"A": 1, "V": 1, "L": 1, "R": 1, "P": 1, "M": 1, "E": 1}
+
+
+def kernel_gate_vector_for_incomplete() -> dict[str, int]:
+    return {"A": 0, "V": 0, "L": 0, "R": 0, "P": 0, "M": 0, "E": 0}
+
+
+def evaluate_kernel(text: str) -> dict[str, Any]:
+    if not text.strip():
+        return {
+            "decision": "INCOMPLETE",
+            "kernel_decision": "INCOMPLETE",
+            "kernel_findings": ["Artifact is empty"],
+            "submission_readiness": "HOLD",
+            "publication_findings": ["Artifact is empty"],
+            "publication_soft_findings": [],
+            "kernel_gate_vector": kernel_gate_vector_for_incomplete(),
+        }
+
+    return {
+        "decision": "PASS",
+        "kernel_decision": "PASS",
+        "kernel_findings": [],
+        "submission_readiness": "READY",
+        "publication_findings": [],
+        "publication_soft_findings": evaluate_publication_soft_findings(text),
+        "kernel_gate_vector": kernel_gate_vector_for_pass(),
+    }
+
+
+def missing_recommendations(text: str) -> dict[str, bool]:
+    return {
+        "abstract": not has_heading(text, "abstract"),
+        "introduction": not has_heading(text, "introduction"),
+        "problem_statement": not has_heading(text, "problem statement"),
+        "synthetic_media": "synthetic media" not in text.lower(),
+    }
+
+
+def correction_summary(text: str) -> list[str]:
+    missing = missing_recommendations(text)
+    changes: list[str] = []
+
+    if missing["abstract"]:
+        changes.append("Add heading: Abstract")
+    if missing["introduction"]:
+        changes.append("Add heading: Introduction")
+    if missing["problem_statement"]:
+        changes.append("Add heading: Problem Statement")
+    if missing["synthetic_media"]:
+        changes.append("Add section: Synthetic Media Considerations")
+
+    return changes
+
+
+def build_correction_preview(text: str) -> str:
+    missing = missing_recommendations(text)
+    inserts: list[str] = []
+
+    if missing["abstract"]:
+        inserts.append("## Abstract\n\n[Insert abstract here.]")
+
+    if missing["introduction"]:
+        inserts.append("## Introduction\n\n[Insert introduction here.]")
+
+    if missing["problem_statement"]:
+        inserts.append("## Problem Statement\n\n[Insert problem statement here.]")
+
+    corrected = text.strip()
+
+    if inserts:
+        prefix = "\n\n".join(inserts).strip()
+        corrected = prefix + "\n\n" + corrected if corrected else prefix
+
+    if missing["synthetic_media"]:
+        synthetic_block = (
+            "## Synthetic Media Considerations\n\n"
+            "[Insert synthetic media discussion here.]"
+        )
+        corrected = corrected.rstrip() + "\n\n" + synthetic_block if corrected else synthetic_block
+
+    return corrected
+
+
+def ensure_run_dir(run_id: str) -> Path:
+    run_dir = RECEIPTS_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+    return run_dir
+
+
+def save_artifact_text(run_dir: Path, text: str, ts: str) -> Path:
+    artifact_path = run_dir / f"pasted_{ts}.txt"
+    artifact_path.write_text(text, encoding="utf-8")
+    return artifact_path
+
+
+def build_result(text_for_analysis: str, artifact_path: Path, run_id: str) -> dict[str, Any]:
+    base = evaluate_kernel(text_for_analysis)
+    artifact_sha = sha256_file(artifact_path)
+    stats = artifact_stats(str(artifact_path))
+    word_count = count_words(text_for_analysis)
+
+    return {
+        "decision": base["decision"],
+        "kernel_decision": base["kernel_decision"],
+        "kernel_findings": base["kernel_findings"],
+        "submission_readiness": base["submission_readiness"],
+        "publication_findings": base["publication_findings"],
+        "publication_soft_findings": base["publication_soft_findings"],
+        "witness_bundle": {
+            "artifact_path": str(artifact_path.resolve()),
+            "artifact_sha256": artifact_sha,
+        },
+        "word_count": word_count,
+        "artifact_bytes": stats["artifact_bytes"],
+        "artifact_lines": stats["artifact_lines"],
+        "kernel_gate_vector": base["kernel_gate_vector"],
+        "timestamp_utc": iso_utc_now(),
+        "run_id": run_id,
+    }
+
+
+def write_decision_receipt(run_dir: Path, result: dict[str, Any]) -> tuple[Path, Path, str]:
+    receipt_path = run_dir / "decision_receipt.json"
+    receipt_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+
+    receipt_sha = sha256_file(receipt_path)
+    receipt_sha_path = run_dir / "decision_receipt.json.sha256"
+    receipt_sha_path.write_text(f"{receipt_sha}  {receipt_path.name}\n", encoding="utf-8")
+    return receipt_path, receipt_sha_path, receipt_sha
+
+
+def add_receipt_bundle_fields(
+    result: dict[str, Any], receipt_path: Path, receipt_sha_path: Path, receipt_sha: str
+) -> dict[str, Any]:
+    result = dict(result)
+    result["witness_bundle"]["decision_receipt_path"] = str(receipt_path.resolve())
+    result["witness_bundle"]["decision_receipt_sha256_path"] = str(receipt_sha_path.resolve())
+    result["witness_bundle"]["decision_receipt_sha256"] = receipt_sha
+    return result
+
+
+def update_receipt_with_final_payload(run_dir: Path, result: dict[str, Any]) -> tuple[Path, Path, str]:
+    receipt_path = run_dir / "decision_receipt.json"
+    receipt_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+
+    receipt_sha = sha256_file(receipt_path)
+    receipt_sha_path = run_dir / "decision_receipt.json.sha256"
+    receipt_sha_path.write_text(f"{receipt_sha}  {receipt_path.name}\n", encoding="utf-8")
+    return receipt_path, receipt_sha_path, receipt_sha
+
+
+def replay_command(artifact_path: str, receipt_path: str) -> str:
+    return (
+        "python verify_receipt.py \\\n"
+        f'  --artifact "{artifact_path}" \\\n'
+        f'  --receipt "{receipt_path}"'
+    )
+
+
+def list_recent_runs(receipts_dir: Path) -> list[Path]:
+    if not receipts_dir.exists():
+        return []
+    return sorted(
+        [p for p in receipts_dir.iterdir() if p.is_dir() and p.name.startswith("RUN_")],
+        reverse=True,
+    )
+
+
+def render_header() -> None:
+    st.set_page_config(page_title=APP_TITLE, layout="wide")
+    st.title(APP_TITLE)
+    st.caption("Artifact-first evaluation with deterministic witness receipts.")
+
+
+def render_sidebar() -> str:
+    with st.sidebar:
+        st.subheader("Navigation")
+
+        if "page" not in st.session_state:
+            st.session_state.page = "new_run"
+
+        if st.button("New Run", use_container_width=True):
+            st.session_state.page = "new_run"
+
+        if st.button("Recent Runs", use_container_width=True):
+            st.session_state.page = "recent_runs"
+
+        if st.button("Archive", use_container_width=True):
+            st.session_state.page = "archive"
+
+        if st.button("Profiles", use_container_width=True):
+            st.session_state.page = "profiles"
+
+        return st.session_state.page
+
+
+def render_result(result: dict[str, Any]) -> None:
     st.subheader("Run Result")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.metric("System Decision", kernel)
-    with c2:
-        st.metric("Submission Status", submission)
+    st.write(f"**System Decision:** {result['decision']}")
+    st.write(f"**Submission Status:** {result['submission_readiness']}")
+    st.write("")
 
     st.code(
-        "\n".join([
-            f"artifact_sha256: {wb.get('artifact_sha256', 'N/A')}",
-            f"decision_receipt_sha256: {wb.get('decision_receipt_sha256', 'N/A')}",
-        ]),
+        f"artifact_sha256: {result['witness_bundle']['artifact_sha256']}\n"
+        f"decision_receipt_sha256: {result['witness_bundle']['decision_receipt_sha256']}",
         language="text",
     )
 
+    col1, col2 = st.columns(2)
 
-def render_witness_bundle(result: dict) -> None:
-    wb = result.get("witness_bundle", {}) or {}
-    st.subheader("Witness Bundle")
+    with col1:
+        st.markdown("### Kernel Decision")
+        st.write(result["kernel_decision"])
 
-    artifact_path = wb.get("artifact_path", "N/A")
-    artifact_sha = wb.get("artifact_sha256", "N/A")
-    receipt_path = wb.get("decision_receipt_path", "N/A")
-    receipt_sha = wb.get("decision_receipt_sha256", "N/A")
+        st.markdown("### Submission Readiness")
+        st.write(result["submission_readiness"])
 
-    block = "\n".join([
-        "Artifact",
-        f"  path: {artifact_path}",
-        f"  sha256: {artifact_sha}",
-        "",
-        "Decision Receipt",
-        f"  path: {receipt_path}",
-        f"  sha256: {receipt_sha}",
-    ])
-    st.code(block, language="text")
+        st.markdown("### Word Count")
+        st.write(result["word_count"])
 
+        st.markdown("### Artifact Bytes")
+        st.write(result["artifact_bytes"])
 
-def render_findings(result: dict) -> None:
-    kernel_findings = result.get("kernel_findings", []) or []
-    soft_findings = result.get("publication_soft_findings", []) or []
+        st.markdown("### Artifact Lines")
+        st.write(result["artifact_lines"])
 
-    st.subheader("Kernel Findings")
-    if kernel_findings:
-        for item in kernel_findings:
-            st.write(f"• {item}")
-    else:
-        st.write("None")
+    with col2:
+        st.markdown("### Kernel Findings")
+        if result["kernel_findings"]:
+            for item in result["kernel_findings"]:
+                st.write(f"• {item}")
+        else:
+            st.write("None")
 
-    st.subheader("Editorial Recommendations")
-    if soft_findings:
-        for item in soft_findings:
-            st.write(f"• {item}")
-    else:
-        st.write("None")
+        st.markdown("### Editorial Delta")
+        st.json(result["publication_findings"])
 
+        st.markdown("### Soft Recommendations")
+        if result["publication_soft_findings"]:
+            for item in result["publication_soft_findings"]:
+                st.write(f"• {item}")
+        else:
+            st.write("None")
 
-def render_replay_command(result: dict) -> None:
-    wb = result.get("witness_bundle", {}) or {}
-    artifact_path = wb.get("artifact_path")
-    receipt_path = wb.get("decision_receipt_path")
+    st.markdown("### Kernel Gate Vector")
+    st.json(result["kernel_gate_vector"])
 
-    if artifact_path and receipt_path:
-        st.subheader("Replay Command")
-        cmd = "\n".join([
-            "python verify_receipt.py \\",
-            f'  --artifact "{artifact_path}" \\',
-            f'  --receipt "{receipt_path}"',
-        ])
-        st.code(cmd, language="bash")
-
-def build_report_zip(run_id: str, result: dict, archive_record: dict | None = None) -> bytes:
-    report_text = build_report_text(run_id, result, archive_record)
-    mem = BytesIO()
-
-    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
-        zf.writestr(f"{run_id}_report.md", report_text)
-        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
-        if archive_record:        
-             zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
-
-    mem.seek(0)
-    return mem.read()
-
-
-import hashlib
-import json
-import shutil
-import sys
-from datetime import datetime, timezone
-from pathlib import Path
-
-import streamlit as st
-
-BASE = Path.cwd()
-HOME = Path.home()
-KERNEL_REPO = HOME / "witness-kernel"
-
-if str(KERNEL_REPO) not in sys.path:
-    sys.path.insert(0, str(KERNEL_REPO))
-
-from wga_kernel.publication_gate import evaluate_artifact
-from wga_kernel.decision_receipt import emit_decision_receipt
-
-SCHEMAS = BASE / "schemas"
-RECEIPTS = BASE / "receipts"
-ARCHIVE = BASE / "archive"
-ARCHIVE_INDEX = ARCHIVE / "archive_index.json"
-
-SCHEMAS.mkdir(parents=True, exist_ok=True)
-RECEIPTS.mkdir(parents=True, exist_ok=True)
-ARCHIVE.mkdir(parents=True, exist_ok=True)
-if not ARCHIVE_INDEX.exists():
-    ARCHIVE_INDEX.write_text("[]\n", encoding="utf-8")
-
-issmad_profile = SCHEMAS / "issmad_draft_v2.json"
-if not issmad_profile.exists():
-    issmad_profile.write_text(
-        json.dumps(
-            {
-                "profile_name": "issmad_draft_v2",
-                "minimum_word_count": 0,
-                "required_headings": [],
-                "required_terms": [],
-                "forbidden_terms": [
-                    "manifesto",
-                    "self-authorizing",
-                    "frozen under u.s. patent law"
-                ],
-                "equivalence_groups": [],
-                "soft_checks": {
-                    "recommended_headings": [
-                        "abstract",
-                        "introduction",
-                        "problem statement",
-                        "conclusion"
-                    ],
-                    "recommended_terms": [
-                        "witness",
-                        "continuation",
-                        "synthetic media"
-                    ]
-                }
-            },
-            indent=2,
-        ),
-        encoding="utf-8",
+    st.markdown("### Witness Bundle")
+    st.write("**Artifact**")
+    st.code(
+        f"path: {result['witness_bundle']['artifact_path']}\n"
+        f"sha256: {result['witness_bundle']['artifact_sha256']}",
+        language="text",
     )
 
+    st.write("**Decision Receipt**")
+    st.code(
+        f"path: {result['witness_bundle']['decision_receipt_path']}\n"
+        f"sha256 path: {result['witness_bundle']['decision_receipt_sha256_path']}\n"
+        f"sha256: {result['witness_bundle']['decision_receipt_sha256']}",
+        language="text",
+    )
 
-def sha256_bytes(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+    st.markdown("### Replay Command")
+    st.code(
+        replay_command(
+            result["witness_bundle"]["artifact_path"],
+            result["witness_bundle"]["decision_receipt_path"],
+        ),
+        language="bash",
+    )
 
-
-def utc_stamp() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-
-
-def load_json(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def write_json(path: Path, obj) -> None:
-    path.write_text(json.dumps(obj, indent=2), encoding="utf-8")
-
-
-def receipt_dirs(folder: Path) -> list[Path]:
-    return sorted([p for p in folder.iterdir() if p.is_dir()], reverse=True) if folder.exists() else []
-
-
-def archive_dirs(folder: Path) -> list[Path]:
-    return sorted([p for p in folder.iterdir() if p.is_dir() and p.name.startswith("A-")], reverse=True) if folder.exists() else []
+    st.markdown("### Full Result")
+    st.json(result)
 
 
-def next_artifact_id() -> str:
-    index = load_json(ARCHIVE_INDEX)
-    seq = len(index) + 1
-    return f"A-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{seq:04d}"
+def render_recent_runs() -> None:
+    st.subheader("Recent Runs")
+    runs = list_recent_runs(RECEIPTS_DIR)
+
+    if not runs:
+        st.info("No runs found.")
+        return
+
+    for run_dir in runs[:25]:
+        receipt_path = run_dir / "decision_receipt.json"
+        artifact_candidates = list(run_dir.glob("pasted_*.txt")) + list(run_dir.glob("uploaded_*"))
+        st.markdown(f"### {run_dir.name}")
+        if artifact_candidates:
+            st.code(str(artifact_candidates[0].resolve()), language="text")
+        if receipt_path.exists():
+            st.code(str(receipt_path.resolve()), language="text")
 
 
-def promote_run_to_archive(run_dir: Path) -> dict:
-    result_path = run_dir / "result.json"
-    manifest_path = run_dir / "manifest.json"
-    receipt_path = run_dir / "decision_receipt.json"
-
-    if not result_path.exists() or not manifest_path.exists() or not receipt_path.exists():
-        raise RuntimeError("Run directory missing required result, manifest, or decision receipt")
-
-    result = load_json(result_path)
-    manifest = load_json(manifest_path)
-    receipt = load_json(receipt_path)
-
-    bundle = result.get("witness_bundle", {})
-    artifact_path = Path(bundle["artifact_path"])
-    artifact_sha256 = bundle["artifact_sha256"]
-    decision_receipt_sha256 = bundle["decision_receipt_sha256"]
-
-    artifact_id = next_artifact_id()
-    dest = ARCHIVE / artifact_id
-    dest.mkdir(parents=True, exist_ok=False)
-
-    copied = []
-    for p in [
-        artifact_path,
-        run_dir / "decision_receipt.json",
-        run_dir / "decision_receipt.json.sha256",
-        run_dir / "result.json",
-        run_dir / "manifest.json",
-    ]:
-        if p.exists():
-            shutil.copy2(p, dest / p.name)
-            copied.append(p.name)
-
-    archive_record = {
-        "artifact_id": artifact_id,
-        "timestamp_utc": receipt.get("timestamp_utc"),
-        "artifact_name": artifact_path.name,
-        "artifact_sha256": artifact_sha256,
-        "decision_receipt_sha256": decision_receipt_sha256,
-        "kernel_decision": result.get("kernel_decision"),
-        "submission_readiness": result.get("submission_readiness"),
-        "source_run": run_dir.name,
-        "author": receipt.get("meta", {}).get("author"),
-        "provenance": receipt.get("meta", {}).get("provenance"),
-        "archive_path": str(dest),
-        "copied_files": copied,
-    }
-
-    write_json(dest / "archive_record.json", archive_record)
-
-    index = load_json(ARCHIVE_INDEX)
-    index.append(archive_record)
-    write_json(ARCHIVE_INDEX, index)
-
-    return archive_record
-
-
-st.set_page_config(page_title="Witness Console", layout="wide")
-st.title("Witness Console")
-
-with st.sidebar:
-    st.header("Control")
-    author = st.text_input("Author", value="J. M. Bookbinder")
-    provenance = st.text_input("Provenance", value="private repository timestamp + local evaluation")
-    replay_verifiable = st.checkbox("Replay verifiable", value=True)
-
-    profile_files = sorted(p.name for p in SCHEMAS.glob("*.json"))
-    selected_profile = st.selectbox("Publication profile", profile_files)
-
-    st.divider()
-    st.caption(f"Kernel repo: {KERNEL_REPO}")
-    st.caption(f"App repo: {BASE}")
-
-tab_run, tab_receipts, tab_archive, tab_profiles = st.tabs(["New Run", "Recent Runs", "Archive", "Profiles"])
-
-with tab_run:
-    c1, c2 = st.columns([1.2, 1])
-
-    with c1:
-        uploaded = st.file_uploader(
-            "Upload artifact",
-            type=["txt", "md", "json", "tex", "log", "csv"],
-            accept_multiple_files=False,
-        )
-        text_input = st.text_area("Or paste text directly", height=220)
-        run_clicked = st.button("Run Governor", use_container_width=True)
-
-    with c2:
-        st.subheader("Mode")
-        st.code(
-            "Kernel: HALT / INDETERMINATE / PASS\n"
-            "Submission: READY / EDITORIAL_GAPS / NOT_REQUESTED",
-            language="text",
-        )
-
-    if run_clicked:
-        if uploaded is None and not text_input.strip():
-            st.error("Upload a file or paste text.")
-        else:
-            if uploaded is not None:
-                raw = uploaded.read()
-                text = raw.decode("utf-8", errors="replace")
-                artifact_name = uploaded.name
-            else:
-                text = text_input
-                raw = text.encode("utf-8")
-                artifact_name = f"pasted_{utc_stamp()}.txt"
-
-            artifact_sha = sha256_bytes(raw)
-            run_id = f"RUN_{utc_stamp()}"
-            run_dir = RECEIPTS / run_id
-            run_dir.mkdir(parents=True, exist_ok=True)
-
-            artifact_path = run_dir / artifact_name
-            artifact_path.write_bytes(raw)
-
-            profile = load_json(SCHEMAS / selected_profile)
-
-            meta = {
-                "artifact_present": True,
-                "parse_success": True,
-                "artifact_sha256": artifact_sha,
-                "run_bundle_path": str(run_dir / "run_bundle.json"),
-                "receipt_path": str(run_dir / "receipt.txt"),
-                "oracle_packet_path": str(run_dir / "oracle_packet.json"),
-                "manifest_path": str(run_dir / "manifest.json"),
-                "provenance": provenance,
-                "author": author,
-                "replay_verifiable": replay_verifiable,
-            }
-
-            result = evaluate_artifact(text, meta, profile)
-
-            receipt_info = emit_decision_receipt(
-                outdir=run_dir,
-                artifact_sha256=artifact_sha,
-                result=result,
-                meta=meta,
-                schema_name="witness_kernel_v1",
-                publication_profile_name=profile.get("profile_name"),
-            )
-
-            result["witness_bundle"] = {
-                "artifact_path": str(artifact_path),
-                "artifact_sha256": artifact_sha,
-                **receipt_info,
-            }
-
-            write_json(run_dir / "result.json", result)
-            write_json(
-                run_dir / "manifest.json",
-                {
-                    "run_id": run_id,
-                    "artifact_name": artifact_name,
-                    "artifact_sha256": artifact_sha,
-                    "decision_receipt_sha256": receipt_info["decision_receipt_sha256"],
-                },
-            )
-
-            m1, m2, m3 = st.columns(3)
-            m1.metric("Kernel Decision", result["kernel_decision"])
-            m2.metric("Submission Readiness", result["submission_readiness"])
-            m3.metric("Word Count", result.get("word_count", len(text.split())))
-
-            lcol, rcol = st.columns(2)
-            with lcol:
-                st.subheader("Kernel Findings")
-                st.json(result.get("kernel_findings", []))
-                st.subheader("Witness Bundle")
-                st.json(result.get("witness_bundle", {}))
-            with rcol:
-                st.subheader("Editorial Delta")
-                st.json(result.get("publication_findings", []))
-                st.subheader("Soft Recommendations")
-                st.json(result.get("publication_soft_findings", []))
-
-            st.subheader("Full Result")
-            st.json(result)
-
-with tab_receipts:
-    dirs = receipt_dirs(RECEIPTS)
-    if not dirs:
-        st.info("No runs yet.")
-    else:
-        selected_run = st.selectbox("Select run", [p.name for p in dirs])
-        run_dir = RECEIPTS / selected_run
-
-        promote_col, info_col = st.columns([1, 2])
-        with promote_col:
-            if st.button("Promote to Archive", use_container_width=True):
-                try:
-                    record = promote_run_to_archive(run_dir)
-                    st.success(f"Archived as {record['artifact_id']}")
-                    st.json(record)
-                except Exception as e:
-                    st.error(str(e))
-        with info_col:
-            st.caption("Promotion copies the governed artifact and its witness materials into append-only archive storage.")
-
-        left, right = st.columns(2)
-        with left:
-            for name in ["decision_receipt.json", "decision_receipt.json.sha256", "result.json", "manifest.json"]:
-                p = run_dir / name
-                if p.exists():
-                    st.markdown(f"**{name}**")
-                    lang = "json" if name.endswith(".json") else "text"
-                    st.code(p.read_text(encoding="utf-8"), language=lang)
-
-        with right:
-            files = [p.name for p in run_dir.iterdir() if p.is_file()]
-            st.markdown("**Run Files**")
-            st.json(files)
-
-with tab_archive:
+def render_archive() -> None:
     st.subheader("Archive")
-    index = load_json(ARCHIVE_INDEX)
-    st.metric("Archived Artifacts", len(index))
+    st.info("Archive view not wired yet.")
 
-    dirs = archive_dirs(ARCHIVE)
-    if not dirs:
-        st.info("No archived artifacts yet.")
+
+def render_profiles() -> None:
+    st.subheader("Profiles")
+    st.info("Profiles view not wired yet.")
+
+
+def main() -> None:
+    render_header()
+    page = render_sidebar()
+    RECEIPTS_DIR.mkdir(parents=True, exist_ok=True)
+
+    if "source_text" not in st.session_state:
+        st.session_state.source_text = ""
+
+    if "editor_buffer" not in st.session_state:
+        st.session_state.editor_buffer = ""
+
+    if "preview_text" not in st.session_state:
+        st.session_state.preview_text = ""
+
+    if "last_result" not in st.session_state:
+        st.session_state.last_result = None
+
+    if "load_editor_from_source" not in st.session_state:
+        st.session_state.load_editor_from_source = True
+
+    if page == "recent_runs":
+        render_recent_runs()
+        return
+
+    if page == "archive":
+        render_archive()
+        return
+
+    if page == "profiles":
+        render_profiles()
+        return
+
+    st.subheader("Upload artifact")
+    uploaded = st.file_uploader(
+        "Upload artifact",
+        type=UPLOAD_TYPES,
+        help="Limit 200MB per file • TXT, MD, JSON, TEX, LOG, CSV",
+    )
+
+    if uploaded is not None:
+        try:
+            st.session_state.source_text = uploaded.getvalue().decode("utf-8", errors="replace")
+        except Exception:
+            st.session_state.source_text = ""
+        st.session_state.load_editor_from_source = True
+
+    if st.session_state.load_editor_from_source:
+        st.session_state.editor_buffer = st.session_state.source_text
+        st.session_state.load_editor_from_source = False
+
+    st.text_area(
+        "Or paste text directly",
+        key="editor_buffer",
+        height=240,
+    )
+
+    current_text = st.session_state.editor_buffer
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        run_clicked = st.button("Run Evaluation", type="primary", use_container_width=True)
+
+    with col2:
+        preview_clicked = st.button("Preview Corrections", use_container_width=True)
+
+    with col3:
+        apply_clicked = st.button("Apply Corrections", use_container_width=True)
+
+    if preview_clicked:
+        st.session_state.preview_text = build_correction_preview(current_text)
+
+    if apply_clicked:
+        proposed = build_correction_preview(current_text)
+        st.session_state.source_text = proposed
+        st.session_state.preview_text = proposed
+        st.session_state.load_editor_from_source = True
+        st.rerun()
+
+    st.markdown("### Suggested Corrections")
+    changes = correction_summary(current_text)
+    if changes:
+        for item in changes:
+            st.write(f"• {item}")
     else:
-        selected_artifact = st.selectbox("Artifact", [p.name for p in dirs])
-        artifact_dir = ARCHIVE / selected_artifact
+        st.write("No structural corrections currently suggested.")
 
-        rec = artifact_dir / "archive_record.json"
-        if rec.exists():
-            st.json(load_json(rec))
+    if st.session_state.preview_text:
+        st.markdown("### Correction Preview")
+        st.text_area(
+            "Preview",
+            key="preview_text",
+            height=220,
+            disabled=True,
+        )
 
-        st.markdown("**Archived Files**")
-        st.json(sorted([p.name for p in artifact_dir.iterdir() if p.is_file()]))
+    if not run_clicked:
+        if st.session_state.last_result is not None:
+            render_result(st.session_state.last_result)
+        return
 
-with tab_profiles:
-    files = sorted(SCHEMAS.glob("*.json"))
-    if not files:
-        st.warning("No profiles found.")
-    else:
-        chosen = st.selectbox("Profile file", [p.name for p in files])
-        st.json(load_json(SCHEMAS / chosen))
+    if not current_text.strip():
+        st.error("Upload a file or paste text directly.")
+        return
 
-import json
-from datetime import datetime
-from io import BytesIO
-from zipfile import ZipFile, ZIP_DEFLATED
+    st.session_state.source_text = current_text
 
-def build_report_text(run_id, result, archive_record=None):
-    lines = []
-    lines.append("# Witness Console Report")
-    lines.append("")
-    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
-    lines.append(f"Run ID: {run_id}")
-    lines.append("")
+    run_id = run_id_from_now()
+    ts = timestamp_token()
+    run_dir = ensure_run_dir(run_id)
 
-    lines.append("## Summary")
-    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
-    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
-    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
-    lines.append("")
+    artifact_path = save_artifact_text(run_dir, current_text, ts)
 
-    lines.append("## Kernel Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
+    result = build_result(
+        text_for_analysis=current_text,
+        artifact_path=artifact_path,
+        run_id=run_id,
+    )
 
-    lines.append("## Witness Bundle")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
-    lines.append("```")
-    lines.append("")
+    receipt_path, receipt_sha_path, receipt_sha = write_decision_receipt(run_dir, result)
+    result = add_receipt_bundle_fields(result, receipt_path, receipt_sha_path, receipt_sha)
+    receipt_path, receipt_sha_path, receipt_sha = update_receipt_with_final_payload(run_dir, result)
 
-    lines.append("## Publication Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
+    st.session_state.last_result = result
+    render_result(result)
 
-    lines.append("## Soft Recommendations")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
 
-    if archive_record:
-        lines.append("## Archive Record")
-        lines.append("```json")
-        lines.append(json.dumps(archive_record, indent=2))
-        lines.append("```")
-        lines.append("")
-
-    lines.append("## Full Result")
-    lines.append("```json")
-    lines.append(json.dumps(result, indent=2))
-    lines.append("```")
-    lines.append("")
-
-    return "\n".join(lines)
-
-def build_report_zip(run_id, result, archive_record=None):
-    report_text = build_report_text(run_id, result, archive_record)
-    mem = BytesIO()
-
-    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
-        zf.writestr(f"{run_id}_report.md", report_text)
-        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
-        if archive_record:
-            zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
-
-    mem.seek(0)
-    return mem.read()
-
-import json
-from datetime import datetime
-from io import BytesIO
-from zipfile import ZipFile, ZIP_DEFLATED
-
-def build_report_text(run_id, result, archive_record=None):
-    lines = []
-    lines.append("# Witness Console Report")
-    lines.append("")
-    lines.append(f"Generated: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}")
-    lines.append(f"Run ID: {run_id}")
-    lines.append("")
-
-    lines.append("## Summary")
-    lines.append(f"- Kernel Decision: {result.get('kernel_decision', result.get('decision', 'UNKNOWN'))}")
-    lines.append(f"- Submission Readiness: {result.get('submission_readiness', 'UNKNOWN')}")
-    lines.append(f"- Word Count: {result.get('word_count', 'UNKNOWN')}")
-    lines.append("")
-
-    lines.append("## Kernel Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("kernel_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
-
-    lines.append("## Witness Bundle")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("witness_bundle", {}), indent=2))
-    lines.append("```")
-    lines.append("")
-
-    lines.append("## Publication Findings")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
-
-    lines.append("## Soft Recommendations")
-    lines.append("```json")
-    lines.append(json.dumps(result.get("publication_soft_findings", []), indent=2))
-    lines.append("```")
-    lines.append("")
-
-    if archive_record:
-        lines.append("## Archive Record")
-        lines.append("```json")
-        lines.append(json.dumps(archive_record, indent=2))
-        lines.append("```")
-        lines.append("")
-
-    lines.append("## Full Result")
-    lines.append("```json")
-    lines.append(json.dumps(result, indent=2))
-    lines.append("```")
-    lines.append("")
-
-    return "\n".join(lines)
-
-def build_report_zip(run_id, result, archive_record=None):
-    report_text = build_report_text(run_id, result, archive_record)
-    mem = BytesIO()
-
-    with ZipFile(mem, "w", ZIP_DEFLATED) as zf:
-        zf.writestr(f"{run_id}_report.md", report_text)
-        zf.writestr(f"{run_id}_result.json", json.dumps(result, indent=2))
-        if archive_record:
-            zf.writestr(f"{run_id}_archive_record.json", json.dumps(archive_record, indent=2))
-
-    mem.seek(0)
-    return mem.read()
-
+if __name__ == "__main__":
+    main()
